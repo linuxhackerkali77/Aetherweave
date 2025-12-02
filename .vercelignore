@@ -1,5 +1,1 @@
-backend/
-backend/**
-*.md
-.git
-.gitignore
+backend
