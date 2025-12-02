@@ -67,7 +67,7 @@ export interface Message {
 }
 
 
-export const getDerivedStatus = (profile: PublicUser | null): {label: string, color: string, isOnline: boolean} => {
+const getDerivedStatus = (profile: PublicUser | null): {label: string, color: string, isOnline: boolean} => {
     if (!profile) return {label: 'Offline', color: 'bg-gray-500', isOnline: false};
     
     // Check lastSeen first for real-time status
@@ -100,7 +100,7 @@ export const getDerivedStatus = (profile: PublicUser | null): {label: string, co
 }
 
 
-export const aetherBotContact: Contact = {
+const aetherBotContact: Contact = {
     id: 'aether-bot',
     name: 'Aether',
     avatar: '',
