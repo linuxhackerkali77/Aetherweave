@@ -1,0 +1,25 @@
+
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function to check for ownership
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // General user files, like avatars or drive files
+    match /users/{userId}/{allPaths=**} {
+      allow read: if true; // Public read for avatars etc.
+      allow write: if isOwner(userId);
+    }
+
+    // Allow users in a chat to read/write media for that chat
+    match /chats/{chatId}/{allPaths=**} {
+        allow read, write: if request.auth != null 
+                    && exists(/databases/$(database)/documents/chats/$(chatId)) 
+                    && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+    }
+  }
+}

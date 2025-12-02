@@ -1,0 +1,648 @@
+
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Represents a user of the application, including their profile, stats, and settings.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the user."
+        },
+        "username": {
+            "type": "string",
+            "description": "The user's unique, public handle."
+        },
+        "email": {
+          "type": "string",
+          "description": "The user's email address.",
+          "format": "email"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The user's display name."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL of the user's profile picture."
+        },
+        "bio": {
+          "type": "string",
+          "description": "A short bio about the user."
+        },
+        "status": {
+          "type": "string",
+          "description": "The user's current status (e.g., Online, Away, Do Not Disturb)."
+        },
+         "lastSeen": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the user was last active."
+        },
+        "isAnonymous": {
+            "type": "boolean",
+            "description": "True if the user is a guest."
+        },
+        "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The timestamp when the user account was created."
+        },
+        "xp": {
+            "type": "number",
+            "description": "The user's current experience points, which also serve as currency."
+        },
+        "level": {
+            "type": "number",
+            "description": "The user's current level."
+        },
+        "trustScore": {
+            "type": "number",
+            "description": "A score representing how much the user is trusted by the system."
+        },
+        "streak": {
+            "type": "number",
+            "description": "The user's current login streak."
+        },
+        "socials": {
+          "type": "object",
+          "properties": {
+            "github": {
+              "type": "string"
+            },
+            "twitter": {
+              "type": "string"
+            },
+            "linkedin": {
+              "type": "string"
+            }
+          }
+        },
+        "interests": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "A list of the user's interests."
+        },
+        "badgesUnlocked": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "An array of badge IDs that the user has unlocked."
+        },
+        "questsCompleted": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "An array of quest IDs that the user has completed and claimed."
+        },
+        "questResets": {
+          "type": "object",
+          "properties": {
+            "daily": { "type": "string", "format": "date-time" },
+            "weekly": { "type": "string", "format": "date-time" },
+            "seasonal": { "type": "string", "format": "date-time" }
+          },
+          "description": "Timestamps for when each quest category was last reset."
+        },
+        "theme": {
+            "type": "string",
+            "description": "The name of the user's currently equipped UI theme."
+        },
+        "inventory": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "A list of inventory item IDs the user owns."
+        },
+        "settings": {
+            "type": "object",
+            "description": "User-specific application settings.",
+            "properties": {
+                "cursor": {
+                    "type": "object",
+                    "properties": {
+                        "style": { "type": "string" },
+                        "lowPerf": { "type": "boolean" }
+                    }
+                },
+                "sound": {
+                    "type": "object",
+                    "properties": {
+                        "masterVolume": { "type": "number" },
+                        "uiVolume": { "type": "number" },
+                        "notificationVolume": { "type": "number" },
+                        "enableSounds": { "type": "boolean" }
+                    }
+                },
+                "animations": {
+                    "type": "object",
+                    "properties": {
+                        "level": { "type": "string", "enum": ["none", "basic", "full"] }
+                    }
+                },
+                "developer": {
+                    "type": "object",
+                    "properties": {
+                        "enableDevTools": { "type": "boolean" }
+                    }
+                }
+            }
+        },
+        "gaming": {
+          "type": "object",
+          "description": "Settings and data specific to the Gaming Dashboard.",
+          "properties": {
+            "username": {
+              "type": "string",
+              "description": "The user's unique gaming handle."
+            },
+            "status": {
+              "type": "string",
+              "enum": ["ONLINE", "IN_GAME", "AFK", "OFFLINE"],
+              "description": "The user's current gaming status."
+            },
+            "theme": {
+              "type": "string",
+              "description": "The user's selected theme for the Gaming Dashboard."
+            },
+            "performanceMode": {
+              "type": "boolean",
+              "description": "Whether high-performance mode is enabled for the Gaming Dashboard."
+            }
+          }
+        },
+        "messagesSent": {
+            "type": "number",
+            "description": "Total number of chat messages sent by the user."
+        },
+        "notesCreated": {
+            "type": "number",
+            "description": "Total number of notes created by the user."
+        },
+        "filesUploaded": {
+            "type": "number",
+            "description": "Total number of files uploaded by the user."
+        },
+        "friends": {
+            "type": "number",
+            "description": "Total number of friends."
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "isAnonymous",
+        "createdAt",
+        "xp",
+        "level",
+        "badgesUnlocked",
+        "inventory",
+        "messagesSent",
+        "notesCreated",
+        "filesUploaded",
+        "friends"
+      ]
+    },
+     "AppStat": {
+      "title": "App Stat",
+      "description": "Tracks usage statistics for an application.",
+      "type": "object",
+      "properties": {
+        "appId": {
+          "type": "string",
+          "description": "The unique identifier for the app."
+        },
+        "viewCount": {
+          "type": "number",
+          "description": "The total number of times the app has been viewed."
+        }
+      },
+      "required": ["appId", "viewCount"]
+    },
+    "Activity": {
+      "title": "Activity",
+      "description": "Represents a single activity performed by a user for the activity feed.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The ID of the user who performed the action." },
+        "userName": { "type": "string", "description": "The display name of the user at the time of action." },
+        "userAvatar": { "type": "string", "description": "The avatar URL of the user at the time of action." },
+        "action": { "type": "string", "description": "A sentence describing the action (e.g., 'created a new note')." },
+        "type": { "type": "string", "enum": ["note", "chat", "task", "contact", "file"] },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "action", "type", "timestamp"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "Represents a chat session, which can be a DM or a group channel.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the chat session."
+        },
+        "participants": {
+          "type": "object",
+          "description": "A map of user IDs participating in the chat, with keys being UIDs and values being true."
+        },
+         "groupData": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "owner": { "type": "string" },
+            "admins": { "type": "array", "items": { "type": "string" } },
+            "bannerUrl": { "type": "string" }
+          },
+          "description": "Metadata specific to group chats."
+        },
+        "isGroup": {
+          "type": "boolean",
+          "description": "True if the chat is a group chat."
+        },
+        "lastMessage": {
+          "type": "string",
+          "description": "A snippet of the last message sent in the chat."
+        },
+        "lastMessageTimestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp of the last message."
+        }
+      },
+      "required": [
+        "id",
+        "participants",
+        "isGroup"
+      ]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Represents a single message within a chat.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the message."
+        },
+        "chatId": {
+          "type": "string",
+          "description": "The ID of the chat this message belongs to."
+        },
+        "senderId": {
+          "type": "string",
+          "description": "The ID of the user who sent the message."
+        },
+        "content": {
+          "type": "string",
+          "description": "The text content of the message."
+        },
+        "mediaUrl": {
+          "type": "string",
+          "description": "The URL of an attached media file."
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "The MIME type of the attached media."
+        },
+        "participants": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "An array of user IDs who are part of this chat, used for security rules."
+        },
+        "status": {
+            "type": "string",
+            "enum": ["sent", "delivered", "read"],
+            "description": "The delivery status of the message."
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the message was sent."
+        },
+        "reactions": {
+          "type": "object",
+          "description": "A map where keys are emojis and values are arrays of user IDs who reacted.",
+          "additionalProperties": {
+              "type": "array",
+              "items": { "type": "string" }
+          }
+        },
+        "replyTo": {
+            "type": "string",
+            "description": "The ID of the message this one is replying to."
+        },
+        "replyContent": {
+            "type": "string",
+            "description": "A snippet of the content of the message being replied to."
+        },
+        "replySender": {
+            "type": "string",
+            "description": "The name of the sender of the message being replied to."
+        }
+      },
+      "required": [
+        "id",
+        "chatId",
+        "senderId",
+        "content",
+        "timestamp",
+        "participants",
+        "status"
+      ]
+    },
+    "Note": {
+      "title": "Note",
+      "description": "Represents a single note created by a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the note."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user who owns the note."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the note."
+        },
+        "content": {
+          "type": "string",
+          "description": "The rich-text content of the note."
+        },
+        "category": {
+          "type": "string",
+          "description": "The category the note belongs to."
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "A list of tags associated with the note."
+        },
+        "pinned": {
+          "type": "boolean",
+          "description": "Whether the note is pinned to the top."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the note was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the note was last updated."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "title",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Represents a notification for a user.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the notification."
+        },
+        "userId": {
+          "type": "string",
+          "description": "The ID of the user this notification is for."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of notification (e.g., 'new_message', 'task_reminder').",
+          "enum": [
+            "new_message",
+            "task_reminder",
+            "file_upload",
+            "system_alert",
+            "friend_request"
+          ]
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the notification."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the notification."
+        },
+        "isRead": {
+          "type": "boolean",
+          "description": "Whether the user has read the notification."
+        },
+        "link": {
+          "type": "string",
+          "description": "A URL to navigate to when the notification is clicked."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The timestamp when the notification was created."
+        }
+      },
+      "required": [
+        "id",
+        "userId",
+        "type",
+        "title",
+        "isRead",
+        "createdAt"
+      ]
+    },
+    "Connection": {
+      "title": "Connection",
+      "description": "Represents the relationship between two users.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The unique identifier for the connection."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "friends", "blocked"],
+          "description": "The status of the connection."
+        },
+        "requestedBy": {
+          "type": "string",
+          "description": "The ID of the user who initiated the connection."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the connection was initiated."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the connection was last updated."
+        }
+      },
+      "required": ["id", "status", "requestedBy", "createdAt", "updatedAt"]
+    },
+    "Quest": {
+        "title": "Quest",
+        "description": "Defines a master quest that users can complete.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "type": { "type": "string", "enum": ["daily", "weekly", "special"] },
+            "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"] },
+            "description": { "type": "string" },
+            "xpReward": { "type": "number" },
+            "unlockBadge": { "type": "string", "description": "The ID of the badge this quest unlocks." }
+        },
+        "required": ["id", "type", "difficulty", "description", "xpReward"]
+    },
+    "Badge": {
+        "title": "Badge",
+        "description": "Represents a visual badge that can be displayed on a user's profile.",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "requirement": { "type": "string", "description": "The condition to unlock this badge." },
+            "rewards": { "type": "string" },
+            "icon": { "type": "string", "description": "Lucide icon name or URL to image." },
+            "level": { "type": "number" }
+        },
+        "required": ["id", "name", "description", "icon"]
+    },
+    "InventoryItem": {
+      "title": "Inventory Item",
+      "description": "Represents a single item in a user's inventory.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "itemId": { "type": "string", "description": "The master ID of the item from the main store collection." },
+        "acquiredAt": { "type": "string", "format": "date-time" },
+        "isEquipped": { "type": "boolean" }
+      },
+      "required": ["id", "itemId", "acquiredAt"]
+    },
+    "GamingServer": {
+      "title": "Gaming Server",
+      "description": "Represents a gaming community server.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "iconUrl": { "type": "string" },
+        "bannerUrl": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "members": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["id", "name", "ownerId"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "email",
+      "google",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/User"
+      },
+      "description": "Stores all information about a user, including profile, stats, and settings."
+    },
+    "/users/{userId}/inventory/{inventoryItemId}": {
+      "schema": {
+        "$ref": "#/entities/InventoryItem"
+      },
+      "description": "Sub-collection for a user's purchased items."
+    },
+    "/users/{userId}/gamingFriends/{friendId}": {
+      "schema": {
+        "$ref": "#/entities/Connection"
+      },
+      "description": "Sub-collection for a user's separate gaming friends list."
+    },
+    "/activity/{activityId}": {
+      "schema": {
+        "$ref": "#/entities/Activity"
+      },
+      "description": "Top-level collection for all user activities shown in feeds."
+    },
+    "/app-stats/{appId}": {
+      "schema": {
+        "$ref": "#/entities/AppStat"
+      },
+      "description": "Top-level collection for tracking application usage statistics."
+    },
+    "/badges/{badgeId}": {
+        "schema": {
+            "$ref": "#/entities/Badge"
+        },
+        "description": "Master collection of all possible badges in the system."
+    },
+    "/quests/{questId}": {
+        "schema": {
+            "$ref": "#/entities/Quest"
+        },
+        "description": "Master collection of all possible quests in the system."
+    },
+    "/chats/{chatId}": {
+      "schema": {
+        "$ref": "#/entities/Chat"
+      },
+      "description": "Top-level collection for all chat sessions."
+    },
+    "/chats/{chatId}/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/Message"
+      },
+      "description": "Sub-collection for messages within a specific chat."
+    },
+     "/gamingDMs/{dmId}/messages/{messageId}": {
+      "schema": {
+        "$ref": "#/entities/Message"
+      },
+      "description": "Sub-collection for messages within a specific gaming DM."
+    },
+    "/gamingServers/{serverId}": {
+      "schema": {
+        "$ref": "#/entities/GamingServer"
+      },
+      "description": "Top-level collection for all gaming servers."
+    },
+    "/gamingNotifications/{notificationId}": {
+      "schema": {
+        "$ref": "#/entities/Notification"
+      },
+      "description": "Top-level collection for all gaming-related notifications."
+    },
+    "/notes/{noteId}": {
+      "schema": {
+        "$ref": "#/entities/Note"
+      },
+      "description": "Top-level collection for all user notes."
+    },
+    "/users/{userId}/notifications/{notificationId}": {
+      "schema": {
+        "$ref": "#/entities/Notification"
+      },
+      "description": "Sub-collection for user-specific notifications."
+    },
+    "/users/{userId}/connections/{otherUserId}": {
+      "schema": {
+        "$ref": "#/entities/Connection"
+      },
+      "description": "Sub-collection representing a user's relationships with others."
+    }
+  }
+}

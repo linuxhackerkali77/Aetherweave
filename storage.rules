@@ -1,0 +1,31 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Helper function to check for ownership
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Rule: Any authenticated user can upload files.
+    // Files are stored under a folder named after their UID.
+    // The uploaded file's name must not be empty.
+    match /{userId}/{allPaths=**} {
+      allow read: if isOwner(userId);
+      allow write: if isOwner(userId) && request.resource.size > 0;
+    }
+    
+    // Allow authenticated users to upload avatars
+    match /avatars/{fileName} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.resource.size > 0 && request.resource.size < 5 * 1024 * 1024; // 5MB limit
+    }
+    
+    // Allow authenticated users to upload chat media
+    match /chats/{chatId}/{fileName=**} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.resource.size > 0 && request.resource.size < 50 * 1024 * 1024; // 50MB limit
+    }
+  }
+}
