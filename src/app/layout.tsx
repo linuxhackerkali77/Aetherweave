@@ -55,7 +55,7 @@ function AppLayout({ children }: { children: ReactNode }) {
   useSoundPlayer();
   useTabEnhancer();
   useTabCard();
-  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(true);
   
   useEffect(() => {
     tabIntegration.start();

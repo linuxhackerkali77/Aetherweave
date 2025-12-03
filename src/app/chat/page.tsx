@@ -30,6 +30,7 @@ import MessageInput from '@/components/chat/MessageInput';
 import ContactList from '@/components/chat/ContactList';
 import ContactDetails from '@/components/chat/ContactDetails';
 import CreateGroupModal from '@/components/chat/CreateGroupModal';
+import GroupSettingsModal from '@/components/chat/GroupSettingsModal';
 import { appEventEmitter } from '@/lib/event-emitter';
 import { useRouter } from 'next/navigation';
 
@@ -67,10 +68,9 @@ export interface Message {
 }
 
 
-const getDerivedStatus = (profile: PublicUser | null): {label: string, color: string, isOnline: boolean} => {
+export const getDerivedStatus = (profile: PublicUser | null): {label: string, color: string, isOnline: boolean} => {
     if (!profile) return {label: 'Offline', color: 'bg-gray-500', isOnline: false};
     
-    // Check lastSeen first for real-time status
     if (profile.lastSeen) {
         try {
             const lastSeenDate = profile.lastSeen.toDate ? profile.lastSeen.toDate() : new Date(profile.lastSeen as any);
@@ -79,28 +79,18 @@ const getDerivedStatus = (profile: PublicUser | null): {label: string, color: st
             if (minutesSinceSeen < 2) {
                 return {label: 'Online', color: 'bg-green-500', isOnline: true};
             } else if (minutesSinceSeen < 10) {
-                return {label: 'Away', color: 'bg-yellow-500', isOnline: true};
+                return {label: 'Away', color: 'bg-yellow-500', isOnline: false};
             }
         } catch (e) {
             console.error('Error parsing lastSeen:', e);
         }
     }
     
-    // Check if user has explicit status
-    if (profile.status) {
-        const statusLower = profile.status.toLowerCase();
-        if (statusLower === 'online') return {label: 'Online', color: 'bg-green-500', isOnline: true};
-        if (statusLower === 'away') return {label: 'Away', color: 'bg-yellow-500', isOnline: true};
-        if (statusLower === 'busy' || statusLower === 'do not disturb') return {label: 'Busy', color: 'bg-red-500', isOnline: true};
-        if (statusLower === 'offline') return {label: 'Offline', color: 'bg-gray-500', isOnline: false};
-        return {label: profile.status, color: 'bg-blue-500', isOnline: true};
-    }
-    
     return {label: 'Offline', color: 'bg-gray-500', isOnline: false};
 }
 
 
-const aetherBotContact: Contact = {
+export const aetherBotContact: Contact = {
     id: 'aether-bot',
     name: 'Aether',
     avatar: '',
@@ -146,7 +136,56 @@ function ChatPageContent() {
   const [forwardingMessage, setForwardingMessage] = useState<Message | null>(null);
   const [showCreateGroup, setShowCreateGroup] = useState(false);
   const [groupCreating, setGroupCreating] = useState(false);
+  const [showGroupSettings, setShowGroupSettings] = useState(false);
+  const [selectedGroupForSettings, setSelectedGroupForSettings] = useState<Contact | null>(null);
 
+  const handleLeaveGroup = useCallback(async (group: Contact) => {
+    if (!user || !firestore) return;
+    if (window.confirm(`Are you sure you want to leave ${group.name}?`)) {
+      try {
+        const groupRef = doc(firestore, 'chats', group.id);
+        const groupDoc = await getDoc(groupRef);
+        if (groupDoc.exists()) {
+          const data = groupDoc.data();
+          const updatedParticipants = { ...data.participants };
+          delete updatedParticipants[user.uid];
+          const updatedMembers = (data.members || []).filter((id: string) => id !== user.uid);
+          
+          await updateDoc(groupRef, {
+            participants: updatedParticipants,
+            members: updatedMembers
+          });
+          
+          setContacts(prev => prev.filter(c => c.id !== group.id));
+          if (selectedContact?.id === group.id) {
+            setSelectedContact(null);
+          }
+        }
+      } catch (error) {
+        console.error('Error leaving group:', error);
+      }
+    }
+  }, [user, firestore, selectedContact]);
+
+  const handleDeleteGroup = useCallback(async (group: Contact) => {
+    if (!user || !firestore) return;
+    if (window.confirm(`Are you sure you want to delete ${group.name}? This cannot be undone.`)) {
+      try {
+        const groupRef = doc(firestore, 'chats', group.id);
+        await updateDoc(groupRef, {
+          deleted: true,
+          deletedAt: serverTimestamp()
+        });
+        
+        setContacts(prev => prev.filter(c => c.id !== group.id));
+        if (selectedContact?.id === group.id) {
+          setSelectedContact(null);
+        }
+      } catch (error) {
+        console.error('Error deleting group:', error);
+      }
+    }
+  }, [user, firestore, selectedContact]);
 
   useEffect(() => {
     setIsClient(true);
@@ -171,19 +210,37 @@ function ChatPageContent() {
     const handleForwardMessage = (message: Message) => {
       setForwardingMessage(message);
     }
+
+    const handleGroupInfo = (group: Contact) => {
+      setSelectedGroupForSettings(group);
+      setShowGroupSettings(true);
+    }
+
+    const handleEditGroup = (group: Contact) => {
+      setSelectedGroupForSettings(group);
+      setShowGroupSettings(true);
+    }
     
     appEventEmitter.on('ui:pin-user', handlePinUser);
     appEventEmitter.on('ui:show-user-profile', handleShowUserProfile);
     appEventEmitter.on('chat:reply-to', handleReplyTo);
     appEventEmitter.on('chat:forward-message', handleForwardMessage);
+    appEventEmitter.on('group:show-info', handleGroupInfo);
+    appEventEmitter.on('group:edit', handleEditGroup);
+    appEventEmitter.on('group:leave', handleLeaveGroup);
+    appEventEmitter.on('group:delete', handleDeleteGroup);
 
     return () => {
         appEventEmitter.off('ui:pin-user', handlePinUser);
         appEventEmitter.off('ui:show-user-profile', handleShowUserProfile);
         appEventEmitter.off('chat:reply-to', handleReplyTo);
         appEventEmitter.off('chat:forward-message', handleForwardMessage);
+        appEventEmitter.off('group:show-info', handleGroupInfo);
+        appEventEmitter.off('group:edit', handleEditGroup);
+        appEventEmitter.off('group:leave', handleLeaveGroup);
+        appEventEmitter.off('group:delete', handleDeleteGroup);
     };
-  }, [connectedUsers, router]);
+  }, [connectedUsers, router, handleLeaveGroup, handleDeleteGroup]);
 
   const pageLoading = userLoading || connectionsLoading;
 
@@ -196,7 +253,7 @@ function ChatPageContent() {
 
   // Populate contacts from connections hook
   useEffect(() => {
-    if (pageLoading || !user) return;
+    if (pageLoading || !user || !firestore) return;
     
     const friendContacts: Contact[] = userConnections
       .filter(c => c.status === 'friends')
@@ -210,25 +267,71 @@ function ChatPageContent() {
           type: 'user'
       }));
       
-    // Add existing groups to contacts
-    const groupContacts: Contact[] = [];
-    // TODO: Fetch user's groups from Firestore
+    // Fetch user's groups from Firestore
+    const fetchGroups = async () => {
+      try {
+        const chatsQuery = query(
+          collection(firestore, 'chats'),
+          orderBy('createdAt', 'desc')
+        );
+        
+        const unsubscribe = onSnapshot(chatsQuery, async (snapshot) => {
+          const groupContacts: Contact[] = [];
+          
+          for (const doc of snapshot.docs) {
+            const data = doc.data();
+            if (data.isGroup && data.participants && data.participants[user.uid]) {
+              // Get member details
+              const memberIds = data.members || Object.keys(data.participants);
+              const members: PublicUser[] = [];
+              
+              for (const memberId of memberIds) {
+                const memberUser = connectedUsers.find(u => u.id === memberId);
+                if (memberUser) {
+                  members.push(memberUser);
+                }
+              }
+              
+              groupContacts.push({
+                id: doc.id,
+                name: data.name || 'Unnamed Group',
+                avatar: data.avatar || '',
+                status: `${memberIds.length} members`,
+                type: 'group',
+                members
+              });
+            }
+          }
+          
+          const allContacts = [...friendContacts, ...groupContacts];
+          setContacts(allContacts);
+        });
+        
+        return unsubscribe;
+      } catch (error) {
+        console.error('Error fetching groups:', error);
+        const allContacts = [...friendContacts];
+        setContacts(allContacts);
+      }
+    };
     
-    const allContacts = [...friendContacts, ...groupContacts];
-
-    setContacts(allContacts);
+    fetchGroups();
 
     const contactId = searchParams.get('contactId');
     if (contactId && !selectedContact) {
-        const contactToSelect = allContacts.find(c => c.id === contactId);
-        if (contactToSelect) {
-            setSelectedContact(contactToSelect);
-        }
-    } else if (!selectedContact && allContacts.length > 0) {
-      setSelectedContact(allContacts[0]);
+        // Wait for contacts to be populated before selecting
+        setTimeout(() => {
+          setContacts(current => {
+            const contactToSelect = current.find(c => c.id === contactId);
+            if (contactToSelect) {
+              setSelectedContact(contactToSelect);
+            }
+            return current;
+          });
+        }, 100);
     }
     
-  }, [userConnections, connectedUsers, pageLoading, searchParams, selectedContact, user]);
+  }, [userConnections, connectedUsers, pageLoading, searchParams, selectedContact, user, firestore]);
 
 
   // Determine chat ID based on selected contact
@@ -372,7 +475,9 @@ function ChatPageContent() {
         isGroup: true,
         createdAt: serverTimestamp(),
         createdBy: user.uid,
-        members: [user.uid, ...selectedMembers.map(m => m.id)]
+        members: [user.uid, ...selectedMembers.map(m => m.id)],
+        avatar: '',
+        admins: [user.uid] // Creator is admin
       });
       
       // Create new group contact
@@ -396,7 +501,69 @@ function ChatPageContent() {
     }
   }, [user, firestore, currentUser]);
 
-    const handleStartCall = useCallback((type: 'video' | 'voice') => {
+  const handleUpdateGroup = useCallback(async (groupId: string, updates: { name?: string; avatar?: string }) => {
+    if (!user || !firestore) return;
+    
+    try {
+      const groupRef = doc(firestore, 'chats', groupId);
+      await updateDoc(groupRef, {
+        ...updates,
+        updatedAt: serverTimestamp(),
+        updatedBy: user.uid
+      });
+      
+      // Update local contacts
+      setContacts(prev => prev.map(contact => 
+        contact.id === groupId 
+          ? { ...contact, ...updates }
+          : contact
+      ));
+      
+      // Update selected contact if it's the same group
+      if (selectedContact?.id === groupId) {
+        setSelectedContact(prev => prev ? { ...prev, ...updates } : null);
+      }
+      
+    } catch (error) {
+      console.error('Error updating group:', error);
+    }
+  }, [user, firestore, selectedContact]);
+
+  const handleRemoveMember = useCallback(async (groupId: string, memberId: string) => {
+    if (!user || !firestore) return;
+    
+    try {
+      const groupRef = doc(firestore, 'chats', groupId);
+      const groupDoc = await getDoc(groupRef);
+      
+      if (groupDoc.exists()) {
+        const data = groupDoc.data();
+        const updatedParticipants = { ...data.participants };
+        delete updatedParticipants[memberId];
+        const updatedMembers = (data.members || []).filter((id: string) => id !== memberId);
+        
+        await updateDoc(groupRef, {
+          participants: updatedParticipants,
+          members: updatedMembers
+        });
+        
+        // Update local contacts
+        setContacts(prev => prev.map(contact => 
+          contact.id === groupId 
+            ? { 
+                ...contact, 
+                members: contact.members?.filter(m => m.id !== memberId),
+                status: `${updatedMembers.length} members`
+              }
+            : contact
+        ));
+      }
+    } catch (error) {
+      console.error('Error removing member:', error);
+    }
+  }, [user, firestore]);
+
+  const handleStartCall = useCallback((type: 'video' | 'voice') => {
         if (!selectedContact || selectedContact.type !== 'user' || !user) return;
         const targetUser = connectedUsers.find(u => u.id === selectedContact.id);
         if (targetUser) {
@@ -503,6 +670,17 @@ function ChatPageContent() {
         }
         onCreateGroup={handleCreateGroup}
         loading={groupCreating}
+      />
+      
+      <GroupSettingsModal
+        open={showGroupSettings}
+        onOpenChange={setShowGroupSettings}
+        group={selectedGroupForSettings}
+        onUpdateGroup={handleUpdateGroup}
+        onRemoveMember={handleRemoveMember}
+        onLeaveGroup={handleLeaveGroup}
+        onDeleteGroup={handleDeleteGroup}
+        currentUserId={user?.uid || ''}
       />
     </>
   );

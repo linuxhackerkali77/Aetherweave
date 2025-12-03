@@ -4,7 +4,7 @@ import { useState, useMemo, memo } from 'react';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import { Search, Bot, Pin, Plus, Users, MessageSquarePlus } from 'lucide-react';
+import { Search, Bot, Pin, Plus, Users, MessageSquarePlus, Info, Edit, UserPlus, LogOut, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Contact, getDerivedStatus } from '@/app/chat/page';
 import { cn } from '@/lib/utils';
@@ -46,9 +46,8 @@ const ContactItem = memo(({ contact, selectedContact, onSelectContact, isClient,
       return null;
     }
 
-    // Get real-time user data from connectedUsers
     const realTimeUser = contact.type === 'user' ? connectedUsers.find(u => u.id === contact.id) : null;
-    const derivedStatus = isClient && realTimeUser ? getDerivedStatus(realTimeUser) : { label: contact.status || '...', color: 'bg-muted-foreground', isOnline: false };
+    const derivedStatus = realTimeUser ? getDerivedStatus(realTimeUser) : { label: contact.status || '...', color: 'bg-gray-500', isOnline: false };
     
     const initial = (contact.name ?? '?').charAt(0).toUpperCase();
 
@@ -88,10 +87,21 @@ const ContactItem = memo(({ contact, selectedContact, onSelectContact, isClient,
                 }}
             >
                 <Avatar className="h-12 w-12 border-2 border-transparent">
-                    {contact.type === 'bot' ?
-                        <div className="w-full h-full flex items-center justify-center bg-primary/20 rounded-full"><Bot className="w-6 h-6 text-primary" /></div> :
+                    {contact.type === 'bot' ? (
+                        <div className="w-full h-full flex items-center justify-center bg-primary/20 rounded-full">
+                            <Bot className="w-6 h-6 text-primary" />
+                        </div>
+                    ) : contact.type === 'group' ? (
+                        contact.avatar ? (
+                            <AvatarImage src={contact.avatar} />
+                        ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-blue-500/20 rounded-full">
+                                <Users className="w-6 h-6 text-blue-500" />
+                            </div>
+                        )
+                    ) : (
                         <AvatarImage src={realTimeUser?.photoURL || contact.avatar || undefined} />
-                    }
+                    )}
                     <AvatarFallback>{initial}</AvatarFallback>
                 </Avatar>
                 {contact.type === 'user' && (
@@ -108,7 +118,9 @@ const ContactItem = memo(({ contact, selectedContact, onSelectContact, isClient,
             <div className="flex-1">
                 <p className="font-semibold text-base">{realTimeUser?.displayName || contact.name}</p>
                 <p className="text-sm text-muted-foreground line-clamp-1">
-                    {contact.type === 'bot' ? "AI Assistant" : derivedStatus.label}
+                    {contact.type === 'bot' ? "AI Assistant" : 
+                     contact.type === 'group' ? contact.status :
+                     derivedStatus.label}
                 </p>
             </div>
         </div>
@@ -143,6 +155,15 @@ export default function ContactList({ contacts, pinnedContacts, selectedContact,
                 { label: 'Send Message', icon: 'MessageSquare' as const, onClick: () => router.push(`/chat?contactId=${contact.id}`) },
                 { label: isPinned ? 'Unpin User' : 'Pin User', icon: 'Pin' as const, onClick: () => appEventEmitter.emit('ui:pin-user', contact) },
             );
+        } else if (contact.type === 'group') {
+            actions.push(
+                { label: 'Group Info', icon: 'Info' as const, onClick: () => appEventEmitter.emit('group:show-info', contact) },
+                { label: 'Edit Group', icon: 'Edit' as const, onClick: () => appEventEmitter.emit('group:edit', contact) },
+                { label: 'Add Members', icon: 'UserPlus' as const, onClick: () => appEventEmitter.emit('group:add-members', contact) },
+                { label: isPinned ? 'Unpin Group' : 'Pin Group', icon: 'Pin' as const, onClick: () => appEventEmitter.emit('ui:pin-user', contact) },
+                { label: 'Leave Group', icon: 'LogOut' as const, onClick: () => appEventEmitter.emit('group:leave', contact) },
+                { label: 'Delete Group', icon: 'Trash2' as const, onClick: () => appEventEmitter.emit('group:delete', contact) },
+            );
         } else {
              actions.push(
                 { label: 'View Bot Info', icon: 'Bot' as const, onClick: () => {} },
@@ -150,7 +171,7 @@ export default function ContactList({ contacts, pinnedContacts, selectedContact,
         }
 
         openHub(e, {
-            type: 'user-contact',
+            type: contact.type === 'group' ? 'group-contact' : 'user-contact',
             data: contact,
             actions: actions,
         });
