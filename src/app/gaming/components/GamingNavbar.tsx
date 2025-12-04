@@ -41,7 +41,7 @@ export default function GamingNavbar({ activeSpace, setActiveSpace }: GamingNavb
 
       const isOwner = profile?.username === 'mubah3r' && space.id === 'aetherweave-hq';
 
-      const actions: Array<{ label: string; icon: keyof typeof import('lucide-react'); onClick: () => void; disabled?: boolean }> = [
+      const actions: any[] = [
           { label: 'Invite People', icon: 'Users', onClick: () => openModal('invite-people', space) },
           { label: 'Mark As Read', icon: 'Check', onClick: () => toast({title: `${space.name} marked as read.`}) },
           { label: 'Mute Space', icon: 'VolumeX', onClick: () => toast({title: `Muted ${space.name}`, description: "You will no longer receive notifications from this space."}) },
@@ -63,7 +63,7 @@ export default function GamingNavbar({ activeSpace, setActiveSpace }: GamingNavb
       openHub(e, {
         type: 'space-context',
         data: space,
-        actions: actions as any
+        actions: actions
       })
     }
     
