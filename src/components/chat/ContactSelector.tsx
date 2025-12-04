@@ -52,7 +52,7 @@ export default function ContactSelector({ open, onOpenChange, contacts, onSelect
           <ScrollArea className="h-80">
             <div className="space-y-1">
               {filteredContacts.map((contact) => {
-                const derivedStatus = getDerivedStatus(contact as PublicUser);
+                const derivedStatus = getDerivedStatus(contact as unknown as PublicUser);
                 const initial = contact.name.charAt(0).toUpperCase();
                 
                 return (
