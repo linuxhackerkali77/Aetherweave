@@ -282,7 +282,7 @@ export default function MessageList({ messages, currentUser, chatId, connectedUs
         openHub(e, {
             type: 'chat-message',
             data: message,
-            actions: messageActions,
+            actions: messageActions as any,
         });
     };
 
