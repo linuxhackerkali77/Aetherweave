@@ -42,7 +42,7 @@ export default function CommandHub() {
 
   const handleActionClick = async (action: CommandHubAction, event: React.MouseEvent<HTMLButtonElement>) => {
     appEventEmitter.emit('ui:sound', 'click');
-    if (!action.disabled && !loadingAction) {
+    if ('onClick' in action && !action.disabled && !loadingAction) {
       await action.onClick(data);
       closeHub();
     }
@@ -77,6 +77,8 @@ export default function CommandHub() {
                 if ('separator' in action && action.separator) {
                   return <div key={index} className="h-px bg-border my-1" />;
                 }
+                
+                if (!('label' in action)) return null;
                 
                 const Icon = action.icon ? (Lucide[action.icon] as Lucide.LucideIcon) : Lucide.Circle;
                 return (
