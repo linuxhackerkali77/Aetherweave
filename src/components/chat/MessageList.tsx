@@ -263,26 +263,26 @@ export default function MessageList({ messages, currentUser, chatId, connectedUs
         e.preventDefault();
         e.stopPropagation();
         
-        let messageActions = [
-            { label: 'Reply', icon: 'MessageSquareReply' as const, onClick: () => appEventEmitter.emit('chat:reply-to', message) },
-            { label: 'Copy Text', icon: 'Copy' as const, onClick: () => { copyToClipboard(message.content); toast({ title: 'Copied to clipboard' }); } },
-            { label: 'Forward', icon: 'ArrowRight' as const, onClick: () => appEventEmitter.emit('chat:forward-message', message) },
-            { label: 'Translate', icon: 'Languages' as const, onClick: () => toast({ title: 'Translation feature coming soon' }) },
-            { label: 'React', icon: 'SmilePlus' as const, onClick: () => toast({ title: 'Use emoji button to react' }) },
-            { label: 'Mark Important', icon: 'Star' as const, onClick: () => handleMarkImportant(message.id) },
+        let messageActions: any[] = [
+            { label: 'Reply', icon: 'MessageSquareReply', onClick: () => appEventEmitter.emit('chat:reply-to', message) },
+            { label: 'Copy Text', icon: 'Copy', onClick: () => { copyToClipboard(message.content); toast({ title: 'Copied to clipboard' }); } },
+            { label: 'Forward', icon: 'ArrowRight', onClick: () => appEventEmitter.emit('chat:forward-message', message) },
+            { label: 'Translate', icon: 'Languages', onClick: () => toast({ title: 'Translation feature coming soon' }) },
+            { label: 'React', icon: 'SmilePlus', onClick: () => toast({ title: 'Use emoji button to react' }) },
+            { label: 'Mark Important', icon: 'Star', onClick: () => handleMarkImportant(message.id) },
         ];
 
         if (message.senderId === user?.uid) {
             messageActions.push(
-                { label: 'Edit Message', icon: 'FilePenLine' as const, onClick: () => toast({ title: 'Edit feature coming soon' }) },
-                { label: 'Delete Message', icon: 'Trash2' as const, onClick: () => handleDeleteMessage(message.id), isDestructive: true }
+                { label: 'Edit Message', icon: 'FilePenLine', onClick: () => toast({ title: 'Edit feature coming soon' }) },
+                { label: 'Delete Message', icon: 'Trash2', onClick: () => handleDeleteMessage(message.id) }
             );
         }
         
         openHub(e, {
             type: 'chat-message',
             data: message,
-            actions: messageActions as any,
+            actions: messageActions,
         });
     };
 
