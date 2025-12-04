@@ -88,7 +88,11 @@ export const CursorProvider = ({ children }: { children: ReactNode }) => {
     unregisterDraggable,
   }), [mode, text, style, lowPerformanceMode, setCursorMode, setCursorStyle, enableLowPerfMode]);
 
-  return <CursorContext.Provider value={contextValue}>{children}</CursorContext.Provider>;
+  return (
+    <CursorContext.Provider value={contextValue}>
+      {children}
+    </CursorContext.Provider>
+  );
 };
 
 export const useCursor = (): SmartCursorContextType => {
