@@ -199,11 +199,7 @@ const CoreNavHub = ({ isOpen, constraintsRef }: CoreNavHubProps) => {
               const isActive = pathname.startsWith(item.href) && (item.href !== '/apps' || pathname === '/apps');
               const isLoading = loadingHref === item.href;
 
-              const NavItem = item.disabled ? 'div' : Link;
-              const navProps = item.disabled ? {} : { href: item.href, onClick: () => handleLinkClick(item.href) };
-              
-              return (
-                <NavItem {...navProps} key={item.href}>
+              const content = (
                   <motion.div
                       className={cn(
                           "absolute top-1/2 left-1/2 p-3 rounded-full flex items-center justify-center pointer-events-auto backdrop-blur-md border",
@@ -247,7 +243,12 @@ const CoreNavHub = ({ isOpen, constraintsRef }: CoreNavHubProps) => {
                         </motion.div>
                       )}
                   </motion.div>
-                </NavItem>
+              );
+              
+              return item.disabled ? (
+                <div key={item.href}>{content}</div>
+              ) : (
+                <Link key={item.href} href={item.href} onClick={() => handleLinkClick(item.href)}>{content}</Link>
               );
             })}
           </motion.div>
