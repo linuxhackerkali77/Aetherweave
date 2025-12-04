@@ -7,24 +7,13 @@ type Events = {
   'permission-error': (error: FirestorePermissionError) => void;
 };
 
-// Typed EventEmitter
-declare interface TypedEventEmitter<TEvents extends Record<string, any>> {
-  on<TEvent extends keyof TEvents>(
-    event: TEvent,
-    listener: TEvents[TEvent]
-  ): this;
-  off<TEvent extends keyof TEvents>(
-    event: TEvent,
-    listener: TEvents[TEvent]
-  ): this;
-  emit<TEvent extends keyof TEvents>(
-    event: TEvent,
-    ...args: Parameters<TEvents[TEvent]>
-  ): boolean;
+class TypedEventEmitter extends EventEmitter {
+  on(event: string, listener: (...args: any[]) => void): this {
+    return super.on(event, listener);
+  }
+  emit(event: string, ...args: any[]): boolean {
+    return super.emit(event, ...args);
+  }
 }
 
-class TypedEventEmitter<
-  TEvents extends Record<string, any>
-> extends EventEmitter {}
-
-export const errorEmitter = new TypedEventEmitter<Events>();
+export const errorEmitter = new TypedEventEmitter();
