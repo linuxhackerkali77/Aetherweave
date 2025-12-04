@@ -15,7 +15,7 @@ interface TutorialPopupProps {
 }
 
 export default function TutorialPopup({ x, y, content }: TutorialPopupProps) {
-  const Icon = useMemo(() => Lucide[content.icon] || Lucide.Info, [content.icon]);
+  const Icon = useMemo(() => (Lucide[content.icon] as any) || Lucide.Info, [content.icon]) as React.ComponentType<{ className?: string }>;
 
   return (
     <motion.div
