@@ -1,26 +1,18 @@
-
 'use client';
 import { createContext, useContext, useState, useMemo, useCallback, ReactNode, useEffect } from 'react';
 import { useUser } from './use-user';
-import { doc, setDoc } from 'firebase/firestore';
-import { useFirestore } from '@/firebase/provider';
 
 export type CursorMode = 'default' | 'link' | 'text' | 'drag' | 'resize-ns' | 'resize-ew' | 'disabled';
 export type CursorStyle = 'default-op' | 'neon-glow' | 'futuristic-trail' | 'spark-halo' | 'editor' | 'minimal-glow' | 'color-pulse';
 
 export interface SmartCursorContextType {
-  // State
   mode: CursorMode;
   text: string | null;
   style: CursorStyle;
   lowPerformanceMode: boolean;
-
-  // API
   setCursorMode: (mode: CursorMode, text?: string | null) => void;
   setCursorStyle: (style: CursorStyle) => void;
   enableLowPerfMode: (enabled: boolean) => void;
-
-  // Stubs for future implementation
   showTooltip: (text: string, options?: any) => void;
   hideTooltip: () => void;
   registerDraggable: (element: Element, options?: any) => void;
@@ -37,7 +29,6 @@ export const CursorProvider = ({ children }: { children: ReactNode }) => {
   const [style, setStyle] = useState<CursorStyle>('default-op');
   const [lowPerformanceMode, setLowPerformanceMode] = useState(false);
 
-  // Load initial settings from profile
   useEffect(() => {
     if (profile) {
       setStyle(profile.settings?.cursor?.style as CursorStyle || 'default-op');
@@ -68,7 +59,6 @@ export const CursorProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [profile, updateProfileSettings]);
 
-  // Stubs for future implementation
   const showTooltip = (text: string) => console.log('Show Tooltip:', text);
   const hideTooltip = () => console.log('Hide Tooltip');
   const registerDraggable = (el: Element) => console.log('Register Draggable:', el);
