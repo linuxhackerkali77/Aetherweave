@@ -2,14 +2,18 @@
 import { createContext, useContext, ReactNode, ProviderProps } from 'react';
 import * as Lucide from 'lucide-react';
 
-export type CommandHubAction = {
-  label: string;
-  icon: keyof typeof Lucide;
-  onClick: (data?: any) => void;
-  isDestructive?: boolean;
-  disabled?: boolean;
-  separator?: boolean;
-};
+export type CommandHubAction = 
+  | {
+      label: string;
+      icon: keyof typeof Lucide;
+      onClick: (data?: any) => void;
+      isDestructive?: boolean;
+      disabled?: boolean;
+      separator?: false;
+    }
+  | {
+      separator: true;
+    };
 
 export type ModalType = 'invite-people' | 'create-join-space' | 'space-settings';
 

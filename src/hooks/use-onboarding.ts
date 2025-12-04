@@ -120,7 +120,7 @@ export function useOnboarding() {
     }
   }, []);
 
-  const startTour = useCallback(() => {
+  const startTour = useCallback((tourId?: string) => {
     try {
       localStorage.removeItem(ONBOARDING_STORAGE_KEY);
     } catch (e) {
@@ -129,6 +129,10 @@ export function useOnboarding() {
     
     setCurrentStep(0);
     setIsActive(true);
+  }, []);
+
+  const getAvailableTours = useCallback(() => {
+    return tours;
   }, []);
 
   return {
@@ -140,5 +144,6 @@ export function useOnboarding() {
     nextStep,
     skipTour,
     startTour,
+    getAvailableTours,
   };
 }

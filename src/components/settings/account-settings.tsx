@@ -34,7 +34,7 @@ export default function AccountSettings() {
   const [displayName, setDisplayName] = useState('');
   const [username, setUsername] = useState('');
   const [bio, setBio] = useState('');
-  const [socials, setSocials] = useState({ github: '', twitter: '', linkedin: '' });
+  const [socials, setSocials] = useState<{ github?: string; twitter?: string; linkedin?: string }>({ github: '', twitter: '', linkedin: '' });
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
@@ -192,15 +192,15 @@ export default function AccountSettings() {
                 <Label>Social Links</Label>
                 <div className="relative">
                     <Github className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input value={socials.github} onChange={e => setSocials({...socials, github: e.target.value})} placeholder="https://github.com/your-username" className="bg-input pl-10"/>
+                    <Input value={socials.github || ''} onChange={e => setSocials({...socials, github: e.target.value})} placeholder="https://github.com/your-username" className="bg-input pl-10"/>
                 </div>
                 <div className="relative">
                     <Twitter className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input value={socials.twitter} onChange={e => setSocials({...socials, twitter: e.target.value})} placeholder="https://twitter.com/your-username" className="bg-input pl-10"/>
+                    <Input value={socials.twitter || ''} onChange={e => setSocials({...socials, twitter: e.target.value})} placeholder="https://twitter.com/your-username" className="bg-input pl-10"/>
                 </div>
                 <div className="relative">
                     <Linkedin className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <Input value={socials.linkedin} onChange={e => setSocials({...socials, linkedin: e.target.value})} placeholder="https://linkedin.com/in/your-username" className="bg-input pl-10"/>
+                    <Input value={socials.linkedin || ''} onChange={e => setSocials({...socials, linkedin: e.target.value})} placeholder="https://linkedin.com/in/your-username" className="bg-input pl-10"/>
                 </div>
             </div>
           

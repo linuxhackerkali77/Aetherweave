@@ -15,7 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
-const mockPermissions = {
+const mockPermissions: Record<string, Array<{ id: string; label: string; description?: string }>> = {
     general: [
         { id: 'viewChannels', label: 'View Channels' },
         { id: 'manageChannels', label: 'Manage Channels' },
