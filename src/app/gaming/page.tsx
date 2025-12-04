@@ -14,11 +14,7 @@ import { Loader2 } from 'lucide-react';
 import GamingChatArea from './components/GamingChatArea';
 import GamingMemberList from './components/GamingMemberList';
 
-interface GamingDashboardPageProps {
-  activeSpace: string | null;
-}
-
-export default function GamingDashboardPage({ activeSpace }: GamingDashboardPageProps) {
+export default function GamingDashboardPage() {
     const { user, profile, setProfile } = useUser();
     const firestore = useFirestore();
     const { toast } = useToast();
@@ -95,7 +91,7 @@ export default function GamingDashboardPage({ activeSpace }: GamingDashboardPage
     return (
         <div className="flex flex-1 p-4 gap-4">
             <GamingChatArea />
-            <GamingMemberList activeSpaceId={activeSpace} />
+            <GamingMemberList activeSpaceId={null} />
 
             <Dialog open={showUsernameModal} onOpenChange={setShowUsernameModal}>
                 <DialogContent className="sm:max-w-[425px] glass-card" onInteractOutside={(e) => e.preventDefault()}>

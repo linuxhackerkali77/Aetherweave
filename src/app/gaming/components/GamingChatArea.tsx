@@ -88,9 +88,8 @@ export default function GamingChatArea() {
                 { label: 'Add Reaction', icon: 'Smile', onClick: () => {} },
                 ...(message.userId === user?.uid ? [{
                     label: 'Delete Message',
-                    icon: 'Trash2',
+                    icon: 'Trash2' as const,
                     onClick: () => handleDeleteMessage(message.id),
-                    isDestructive: true,
                 }] : []),
             ]
         })

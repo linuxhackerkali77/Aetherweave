@@ -6,7 +6,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import { Search, Bot, Pin, Plus, Users, MessageSquarePlus, Info, Edit, UserPlus, LogOut, Trash2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Contact, getDerivedStatus } from '@/app/chat/page';
+import { Contact } from '@/types/chat';
+import { getDerivedStatus } from '@/lib/chat-utils';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import {

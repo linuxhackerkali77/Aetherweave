@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Contact } from '@/app/chat/page';
+import { Contact } from '@/types/chat';
 import { PublicUser } from '@/hooks/use-connections';
 import { Users, Upload, X, UserMinus, Crown, Shield } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,8 +17,8 @@ interface GroupSettingsModalProps {
   group: Contact | null;
   onUpdateGroup: (groupId: string, updates: { name?: string; avatar?: string }) => void;
   onRemoveMember: (groupId: string, memberId: string) => void;
-  onLeaveGroup: (groupId: string) => void;
-  onDeleteGroup: (groupId: string) => void;
+  onLeaveGroup: (group: Contact) => void;
+  onDeleteGroup: (group: Contact) => void;
   currentUserId: string;
   loading?: boolean;
 }
@@ -61,14 +61,14 @@ export default function GroupSettingsModal({
 
   const handleLeaveGroup = () => {
     if (group) {
-      onLeaveGroup(group.id);
+      onLeaveGroup(group);
       onOpenChange(false);
     }
   };
 
   const handleDeleteGroup = () => {
     if (group && window.confirm('Are you sure you want to delete this group? This action cannot be undone.')) {
-      onDeleteGroup(group.id);
+      onDeleteGroup(group);
       onOpenChange(false);
     }
   };

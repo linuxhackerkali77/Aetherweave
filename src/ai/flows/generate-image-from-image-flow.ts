@@ -44,7 +44,7 @@ const generateImageFromImageFlow = ai.defineFlow(
       },
     });
 
-    if (!media.url) {
+    if (!media || !media.url) {
       throw new Error('Image generation failed to return a URL.');
     }
 

@@ -222,7 +222,7 @@ export default function NotesPage() {
     openHub(e, {
       type: isMultiSelect ? 'note-multi-select' : 'note-item',
       data: note,
-      actions,
+      actions: actions as any,
     });
   };
 

@@ -1,7 +1,7 @@
 
 import { EventEmitter } from 'events';
 import { PublicUser } from '@/hooks/use-connections';
-import { Message } from '@/app/chat/page';
+import { Message } from '@/types/chat';
 
 export type Rarity = 'Common' | 'Rare' | 'Epic' | 'Cyber Rare' | 'Legendary' | 'Mythic';
 
@@ -15,6 +15,12 @@ type AppEvents = {
   'ui:pin-user': (user: PublicUser) => void;
   'ui:show-user-profile': (userId: string) => void;
   'chat:reply-to': (message: Message) => void;
+  'chat:forward-message': (message: Message) => void;
+  'group:show-info': (group: any) => void;
+  'group:edit': (group: any) => void;
+  'group:leave': (group: any) => void;
+  'group:delete': (group: any) => void;
+  'group:add-members': (group: any) => void;
 };
 
 // Typed EventEmitter

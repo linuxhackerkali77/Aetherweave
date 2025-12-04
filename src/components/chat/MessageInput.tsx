@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Send, Smile, Paperclip, Loader2, X, Image as ImageIcon, Video, File as FileIcon } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import EmojiPicker from './EmojiPicker';
-import { Message, aetherBotContact, Contact } from '@/app/chat/page';
+import { Message, aetherBotContact, Contact } from '@/types/chat';
 import { useUser } from '@/hooks/use-user';
 import { useFirestore } from '@/firebase/provider';
 import { runAssistantStream } from '@/ai/flows/assistant-stream-flow';

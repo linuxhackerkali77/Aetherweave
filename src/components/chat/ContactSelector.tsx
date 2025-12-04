@@ -5,7 +5,8 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Search, Bot } from 'lucide-react';
-import { Contact, getDerivedStatus } from '@/app/chat/page';
+import { Contact } from '@/types/chat';
+import { getDerivedStatus } from '@/lib/chat-utils';
 import { PublicUser } from '@/hooks/use-connections';
 import { cn } from '@/lib/utils';
 

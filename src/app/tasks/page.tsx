@@ -66,7 +66,7 @@ export default function TasksPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="priority">Priority</Label>
-                <Select value={priority} onValueChange={setPriority}>
+                <Select value={priority} onValueChange={(value) => setPriority(value as 'Low' | 'Medium' | 'High')}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>

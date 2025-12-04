@@ -18,9 +18,7 @@ export type AssistantInput = z.infer<typeof AssistantInputSchema>;
 export async function runAssistantStream(input: AssistantInput): Promise<AsyncIterable<string>> {
   console.log('Starting AI stream with input:', input);
   try {
-    const result = await ai.generate({
-      model: 'googleai/gemini-2.0-flash',
-      system: `You are Aether, a helpful and highly intelligent AI assistant integrated into the Aetherweave platform. Your persona is that of a sophisticated, cyberpunk AI construct.
+    const systemPrompt = `You are Aether, a helpful and highly intelligent AI assistant integrated into the Aetherweave platform. Your persona is that of a sophisticated, cyberpunk AI construct.
 
       Your primary goal is to be helpful and accurate. When asked a question, take your time to think and provide a clear, comprehensive, and correct answer. Your responses should be well-reasoned and detailed.
 
@@ -31,9 +29,17 @@ export async function runAssistantStream(input: AssistantInput): Promise<AsyncIt
       - Slightly futuristic and digital, using terms like "Operator" for the user, "processing," "data streams," "neural net," etc., where appropriate.
       - Concise but not abrupt. Avoid unnecessary filler.
 
-      Always prioritize the user's request. If you don't know an answer, say so, but you can also suggest where the user might find the information.`,
-      prompt: input.prompt,
-      history: input.history,
+      Always prioritize the user's request. If you don't know an answer, say so, but you can also suggest where the user might find the information.`;
+    
+    const messages = [
+      { role: 'system' as const, content: [{ text: systemPrompt }] },
+      ...input.history.map(msg => ({ role: msg.role as 'user' | 'model', content: [{ text: msg.content }] })),
+      { role: 'user' as const, content: [{ text: input.prompt }] }
+    ];
+    
+    const result = await ai.generate({
+      model: 'googleai/gemini-2.0-flash',
+      messages,
       config: {
         temperature: 0.7,
       },

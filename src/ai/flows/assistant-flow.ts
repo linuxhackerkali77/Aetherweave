@@ -41,8 +41,7 @@ const assistantFlow = ai.defineFlow(
   },
   async ({history, prompt}) => {
     
-    const response = await ai.generate({
-        system: `You are Aether, a helpful and highly intelligent AI assistant integrated into the Aetherweave platform. Your persona is that of a sophisticated, cyberpunk AI construct.
+    const systemPrompt = `You are Aether, a helpful and highly intelligent AI assistant integrated into the Aetherweave platform. Your persona is that of a sophisticated, cyberpunk AI construct.
 
         Your primary goal is to be helpful and accurate. When asked a question, take your time to think and provide a clear, comprehensive, and correct answer. Your responses should be well-reasoned and detailed.
 
@@ -53,10 +52,15 @@ const assistantFlow = ai.defineFlow(
         - Slightly futuristic and digital, using terms like "Operator" for the user, "processing," "data streams," "neural net," etc., where appropriate.
         - Concise but not abrupt. Avoid unnecessary filler.
 
-        Always prioritize the user's request. If you don't know an answer, say so, but you can also suggest where the user might find the information.`,
-        prompt: prompt,
-        history: history,
-    });
+        Always prioritize the user's request. If you don't know an answer, say so, but you can also suggest where the user might find the information.`;
+    
+    const messages = [
+      { role: 'system' as const, content: [{ text: systemPrompt }] },
+      ...history.map(msg => ({ role: msg.role as 'user' | 'model', content: [{ text: msg.content }] })),
+      { role: 'user' as const, content: [{ text: prompt }] }
+    ];
+    
+    const response = await ai.generate({ messages });
 
     return { response: response.text || 'I am unable to respond at the moment.' };
   }

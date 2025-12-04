@@ -3,7 +3,7 @@
 import { useRef, useEffect, memo, useCallback } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { CardContent } from '@/components/ui/card';
-import { Message, aetherBotContact } from '@/app/chat/page';
+import { Message, aetherBotContact } from '@/types/chat';
 import { User } from 'firebase/auth';
 import { motion } from 'framer-motion';
 import { cn, copyToClipboard } from '@/lib/utils';
