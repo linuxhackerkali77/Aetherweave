@@ -151,10 +151,11 @@ export default function ContactList({ contacts, pinnedContacts, selectedContact,
 
         let actions = [];
         if (contact.type === 'user') {
+            const publicUser = connectedUsers.find(u => u.id === contact.id);
             actions.push(
                 { label: 'View Profile', icon: 'User' as const, onClick: () => router.push(`/profile/${contact.id}`) },
                 { label: 'Send Message', icon: 'MessageSquare' as const, onClick: () => router.push(`/chat?contactId=${contact.id}`) },
-                { label: isPinned ? 'Unpin User' : 'Pin User', icon: 'Pin' as const, onClick: () => appEventEmitter.emit('ui:pin-user', contact) },
+                { label: isPinned ? 'Unpin User' : 'Pin User', icon: 'Pin' as const, onClick: () => publicUser && appEventEmitter.emit('ui:pin-user', publicUser) },
             );
         } else if (contact.type === 'group') {
             actions.push(
