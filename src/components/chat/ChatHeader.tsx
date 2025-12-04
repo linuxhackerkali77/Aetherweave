@@ -56,7 +56,7 @@ export default function ChatHeader({ contact, onStartCall, connectedUsers, isCli
                             <AvatarFallback>{contact.name.charAt(0)}</AvatarFallback>
                         </Avatar>
                     ) : (
-                        <UserPopover user={realTimeUser || contact as PublicUser}>
+                        <UserPopover user={realTimeUser || contact as unknown as PublicUser}>
                             <Avatar className="h-8 w-8 md:h-12 md:w-12 border-2 border-transparent cursor-pointer">
                                 {contact.type === 'bot' ?
                                     <div className="w-full h-full flex items-center justify-center bg-primary/20 rounded-full"><Bot className="w-6 h-6 text-primary" /></div> :
@@ -78,7 +78,7 @@ export default function ChatHeader({ contact, onStartCall, connectedUsers, isCli
                         </>
                     ) : (
                         <>
-                            <UserPopover user={realTimeUser || contact as PublicUser}>
+                            <UserPopover user={realTimeUser || contact as unknown as PublicUser}>
                                 <h2 className="text-sm md:text-xl font-headline text-glow cursor-pointer hover:underline truncate">{realTimeUser?.displayName || contact.name}</h2>
                             </UserPopover>
                             <p className="text-xs md:text-sm text-muted-foreground truncate">{contact.type === 'bot' ? 'AI Assistant' : derivedStatus.label}</p>
