@@ -41,22 +41,22 @@ export default function GamingNavbar({ activeSpace, setActiveSpace }: GamingNavb
 
       const isOwner = profile?.username === 'mubah3r' && space.id === 'aetherweave-hq';
 
-      let actions = [
-          { label: 'Invite People', icon: 'Users' as const, onClick: () => openModal('invite-people', space) },
-          { label: 'Mark As Read', icon: 'Check' as const, onClick: () => toast({title: `${space.name} marked as read.`}) },
-          { label: 'Mute Space', icon: 'VolumeX' as const, onClick: () => toast({title: `Muted ${space.name}`, description: "You will no longer receive notifications from this space."}) },
-          { label: 'Edit Space Profile', icon: 'Edit' as const, onClick: () => toast({title: 'Per-Space Profile Updated', description: "Your identity for this space has been changed."}) },
+      let actions: any[] = [
+          { label: 'Invite People', icon: 'Users', onClick: () => openModal('invite-people', space) },
+          { label: 'Mark As Read', icon: 'Check', onClick: () => toast({title: `${space.name} marked as read.`}) },
+          { label: 'Mute Space', icon: 'VolumeX', onClick: () => toast({title: `Muted ${space.name}`, description: "You will no longer receive notifications from this space."}) },
+          { label: 'Edit Space Profile', icon: 'Edit', onClick: () => toast({title: 'Per-Space Profile Updated', description: "Your identity for this space has been changed."}) },
       ];
 
       if (isOwner) {
         actions.push(
-          { label: 'Create Category', icon: 'FolderPlus' as const, onClick: () => toast({title: 'Category created.'}) },
-          { label: 'Create Channel', icon: 'Hash' as const, onClick: () => toast({title: 'Channel created.'}) },
-          { label: 'Space Settings', icon: 'Settings' as const, onClick: () => openModal('space-settings', space) }
+          { label: 'Create Category', icon: 'FolderPlus', onClick: () => toast({title: 'Category created.'}) },
+          { label: 'Create Channel', icon: 'Hash', onClick: () => toast({title: 'Channel created.'}) },
+          { label: 'Space Settings', icon: 'Settings', onClick: () => openModal('space-settings', space) }
         );
       }
 
-      actions.push({ label: 'Leave Space', icon: 'LogOut' as const, onClick: () => {}, isDestructive: true });
+      actions.push({ label: 'Leave Space', icon: 'LogOut', onClick: () => {}, isDestructive: true });
 
       openHub(e, {
         type: 'space-context',
