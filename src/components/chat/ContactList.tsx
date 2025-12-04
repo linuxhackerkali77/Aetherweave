@@ -162,7 +162,7 @@ export default function ContactList({ contacts, pinnedContacts, selectedContact,
                 { label: 'Group Info', icon: 'Info' as const, onClick: () => appEventEmitter.emit('group:show-info', contact) },
                 { label: 'Edit Group', icon: 'Edit' as const, onClick: () => appEventEmitter.emit('group:edit', contact) },
                 { label: 'Add Members', icon: 'UserPlus' as const, onClick: () => appEventEmitter.emit('group:add-members', contact) },
-                { label: isPinned ? 'Unpin Group' : 'Pin Group', icon: 'Pin' as const, onClick: () => appEventEmitter.emit('ui:pin-user', contact) },
+                { label: isPinned ? 'Unpin Group' : 'Pin Group', icon: 'Pin' as const, onClick: () => {} },
                 { label: 'Leave Group', icon: 'LogOut' as const, onClick: () => appEventEmitter.emit('group:leave', contact) },
                 { label: 'Delete Group', icon: 'Trash2' as const, onClick: () => appEventEmitter.emit('group:delete', contact) },
             );
