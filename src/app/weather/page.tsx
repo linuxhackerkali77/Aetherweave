@@ -108,8 +108,10 @@ export default function WeatherPage() {
         const hourlyWeatherCodeVar = hourly.variables(2);
         const uvIndexVar = daily.variables(3);
         
-        const uvIndexValues = uvIndexVar?.valuesArray() ? Array.from(uvIndexVar.valuesArray()) : [];
-        const hourlyWeatherCodes = hourlyWeatherCodeVar?.valuesArray() ? Array.from(hourlyWeatherCodeVar.valuesArray()) : [];
+        const uvIndexArray = uvIndexVar?.valuesArray();
+        const uvIndexValues = uvIndexArray ? Array.from(uvIndexArray) : [];
+        const hourlyWeatherCodeArray = hourlyWeatherCodeVar?.valuesArray();
+        const hourlyWeatherCodes = hourlyWeatherCodeArray ? Array.from(hourlyWeatherCodeArray) : [];
 
         setWeather({
           location: "Your Location",
