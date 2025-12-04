@@ -97,7 +97,7 @@ export function FirebaseErrorListener() {
                     }}
                 >
                     <button
-                        onClick={() => handleCopy(error.rules)}
+                        onClick={() => handleCopy(error.rules || '')}
                         style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', color: 'white', cursor: 'pointer' }}
                         >
                         <ClipboardCopy size={16} />
