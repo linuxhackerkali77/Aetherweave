@@ -95,7 +95,9 @@ export default function MessageInput({ chatId, selectedContact, messages, setMes
             setForwardingMessage(message);
         };
         appEventEmitter.on('chat:forward-message', handleForwardMessage);
-        return () => appEventEmitter.off('chat:forward-message', handleForwardMessage);
+        return () => {
+            appEventEmitter.off('chat:forward-message', handleForwardMessage);
+        };
     }, [setForwardingMessage]);
     
     const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
