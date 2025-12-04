@@ -98,5 +98,3 @@ export const useCursor = (): SmartCursorContextType => {
   }
   return context;
 };
-
-    
