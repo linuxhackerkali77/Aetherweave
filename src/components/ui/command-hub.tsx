@@ -74,7 +74,7 @@ export default function CommandHub() {
           >
             <div className="overflow-y-auto max-h-[320px] custom-scroll p-1.5">
               {actions.map((action, index) => {
-                if (action.separator) {
+                if ('separator' in action && action.separator) {
                   return <div key={index} className="h-px bg-border my-1" />;
                 }
                 
