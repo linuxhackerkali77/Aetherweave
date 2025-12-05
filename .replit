@@ -17,7 +17,6 @@ NEXT_PUBLIC_FIREBASE_APP_ID = "1:185134863770:web:4af101ef873aed44105623"
 NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID = "G-S33W1P5G5D"
 NEXT_PUBLIC_API_URL = "https://d9ec0bbc-89d8-47c4-b304-527133da84cb-00-lemqmaust2df.pike.replit.dev:4000/api"
 PORT = "4000"
-NODE_ENV = "development"
 CORS_ORIGIN = "https://d9ec0bbc-89d8-47c4-b304-527133da84cb-00-lemqmaust2df.pike.replit.dev"
 FIREBASE_PROJECT_ID = "studio-4634736248-c0b42"
 
@@ -48,6 +47,10 @@ waitForPort = 5000
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 40873
+externalPort = 3000
 
 [[ports]]
 localPort = 46489
