@@ -10,6 +10,9 @@ Aetherweave is a Next.js 15 application with a cyberpunk/neon aesthetic. It feat
 - Build and deployment ready for Netlify
 
 ## Recent Changes
+- 2024-12-05: Added site-wide BetaBanner component with WhatsApp (03122574283) and Email (aetherweavedash@gmail.com) contact info
+- 2024-12-05: Enhanced landing page with real creator info (Mubashir Ali, 15 years old, Class 10, Pakistan)
+- 2024-12-05: Added CreatorCard component with bio and tech stack display
 - 2024-12-05: Fixed build errors - removed NODE_ENV environment variable that conflicted with Next.js
 - 2024-12-05: Updated Next.js to 15.1.0 (stable version)
 - 2024-12-05: Updated netlify.toml with proper Next.js plugin configuration
