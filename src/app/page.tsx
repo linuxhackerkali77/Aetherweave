@@ -3,63 +3,85 @@
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/use-user';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Sparkles, Zap, Brain, MessageCircle, Shield, Rocket, 
-  ArrowRight, Play, ChevronDown, Globe, Cpu, Network,
-  Lock, Star, Users, Clock, Layers, Eye, Terminal
+  Play, ChevronDown, Globe,
+  Lock, Layers, Eye, Terminal
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-const FloatingParticle = ({ delay = 0, size = 4, duration = 20 }: { delay?: number; size?: number; duration?: number }) => (
-  <motion.div
-    className="absolute rounded-full pointer-events-none"
-    style={{
-      width: size,
-      height: size,
-      background: `radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)`,
-      boxShadow: `0 0 ${size * 2}px hsl(var(--primary) / 0.5)`,
-    }}
-    initial={{ 
-      x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000),
-      y: (typeof window !== 'undefined' ? window.innerHeight : 800) + 100,
-      opacity: 0 
-    }}
-    animate={{
-      y: -100,
-      opacity: [0, 1, 1, 0],
-      x: `+=${Math.random() * 200 - 100}`,
-    }}
-    transition={{
-      duration,
-      delay,
-      repeat: Infinity,
-      ease: "linear",
-    }}
-  />
-);
+const FloatingParticle = ({ delay = 0, size = 4, duration = 20, seed = 0 }: { delay?: number; size?: number; duration?: number; seed?: number }) => {
+  const [mounted, setMounted] = useState(false);
+  const [pos, setPos] = useState({ x: seed * 50 % 100, drift: 0 });
+  
+  useEffect(() => {
+    setMounted(true);
+    setPos({ 
+      x: Math.random() * 100, 
+      drift: Math.random() * 200 - 100 
+    });
+  }, []);
+
+  if (!mounted) return null;
+
+  return (
+    <motion.div
+      className="absolute rounded-full pointer-events-none"
+      style={{
+        width: size,
+        height: size,
+        left: `${pos.x}%`,
+        background: `radial-gradient(circle, hsl(var(--primary)) 0%, transparent 70%)`,
+        boxShadow: `0 0 ${size * 2}px hsl(var(--primary) / 0.5)`,
+      }}
+      initial={{ 
+        y: '100vh',
+        opacity: 0 
+      }}
+      animate={{
+        y: -100,
+        opacity: [0, 1, 1, 0],
+        x: `+=${pos.drift}`,
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+    />
+  );
+};
 
 const GlitchText = ({ children, className }: { children: string; className?: string }) => {
   const [glitch, setGlitch] = useState(false);
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
+    setMounted(true);
+    const baseInterval = 3500;
     const interval = setInterval(() => {
       setGlitch(true);
       setTimeout(() => setGlitch(false), 150);
-    }, 3000 + Math.random() * 2000);
+    }, baseInterval);
     return () => clearInterval(interval);
   }, []);
+
+  if (!mounted) {
+    return <span className={cn("relative inline-block", className)}>{children}</span>;
+  }
 
   return (
     <span className={cn("relative inline-block", className)}>
       <span className={cn(glitch && "animate-glitch")}>{children}</span>
       {glitch && (
         <>
-          <span className="absolute top-0 left-0 text-cyan-400 opacity-70" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 45%, 0 45%)', transform: 'translate(-2px, -2px)' }}>
+          <span className="absolute top-0 left-0 text-cyan-400 opacity-70" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 45%, 0 45%)', transform: 'translate(-2px, -2px)' }} aria-hidden="true">
             {children}
           </span>
-          <span className="absolute top-0 left-0 text-rose-500 opacity-70" style={{ clipPath: 'polygon(0 55%, 100% 55%, 100% 100%, 0 100%)', transform: 'translate(2px, 2px)' }}>
+          <span className="absolute top-0 left-0 text-rose-500 opacity-70" style={{ clipPath: 'polygon(0 55%, 100% 55%, 100% 100%, 0 100%)', transform: 'translate(2px, 2px)' }} aria-hidden="true">
             {children}
           </span>
         </>
@@ -102,13 +124,21 @@ const HologramCard = ({ icon: Icon, title, description, delay = 0 }: { icon: any
 
 const DataStream = () => {
   const chars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン';
-  const streams = useMemo(() => Array.from({ length: 15 }, (_, i) => ({
-    id: i,
-    left: `${5 + (i * 6.5)}%`,
-    delay: Math.random() * 5,
-    duration: 10 + Math.random() * 10,
-    chars: Array.from({ length: 20 }, () => chars[Math.floor(Math.random() * chars.length)])
-  })), []);
+  const [mounted, setMounted] = useState(false);
+  const [streams, setStreams] = useState<Array<{id: number; left: string; delay: number; duration: number; chars: string[]}>>([]);
+
+  useEffect(() => {
+    setMounted(true);
+    setStreams(Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      left: `${5 + (i * 6.5)}%`,
+      delay: Math.random() * 5,
+      duration: 10 + Math.random() * 10,
+      chars: Array.from({ length: 20 }, () => chars[Math.floor(Math.random() * chars.length)])
+    })));
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div className="absolute inset-0 overflow-hidden opacity-20 pointer-events-none">
@@ -136,15 +166,25 @@ const DataStream = () => {
 };
 
 const NeuralNetwork = () => {
-  const nodes = useMemo(() => Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    x: 10 + (Math.random() * 80),
-    y: 10 + (Math.random() * 80),
-    size: 3 + Math.random() * 4
-  })), []);
+  const [mounted, setMounted] = useState(false);
+  const [nodes, setNodes] = useState<Array<{id: number; x: number; y: number; size: number; animDuration: number; linkDelay: number}>>([]);
+
+  useEffect(() => {
+    setMounted(true);
+    setNodes(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      x: 10 + (Math.random() * 80),
+      y: 10 + (Math.random() * 80),
+      size: 3 + Math.random() * 4,
+      animDuration: 2 + Math.random() * 2,
+      linkDelay: Math.random() * 2
+    })));
+  }, []);
+
+  if (!mounted || nodes.length === 0) return null;
 
   return (
-    <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none">
+    <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none" aria-hidden="true">
       {nodes.map((node, i) => 
         nodes.slice(i + 1).map((target, j) => {
           const distance = Math.hypot(target.x - node.x, target.y - node.y);
@@ -160,7 +200,7 @@ const NeuralNetwork = () => {
                 strokeWidth="0.5"
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: 1, opacity: [0.2, 0.5, 0.2] }}
-                transition={{ duration: 3, repeat: Infinity, delay: Math.random() * 2 }}
+                transition={{ duration: 3, repeat: Infinity, delay: node.linkDelay }}
               />
             );
           }
@@ -176,7 +216,7 @@ const NeuralNetwork = () => {
           fill="hsl(var(--primary))"
           initial={{ scale: 0 }}
           animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2 + Math.random() * 2, repeat: Infinity }}
+          transition={{ duration: node.animDuration, repeat: Infinity }}
         />
       ))}
     </svg>
@@ -187,18 +227,20 @@ const CyberButton = ({ children, href, variant = 'primary', icon: Icon }: { chil
   const [hover, setHover] = useState(false);
   
   return (
-    <Link href={href}>
-      <motion.button
+    <motion.div
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      onHoverStart={() => setHover(true)}
+      onHoverEnd={() => setHover(false)}
+    >
+      <Link 
+        href={href}
         className={cn(
-          "relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden group transition-all duration-300",
+          "relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden group transition-all duration-300 inline-flex items-center",
           variant === 'primary' 
             ? "bg-primary text-primary-foreground hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)]" 
             : "bg-transparent border-2 border-primary/50 text-primary hover:border-primary hover:bg-primary/10"
         )}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        onHoverStart={() => setHover(true)}
-        onHoverEnd={() => setHover(false)}
       >
         <motion.div
           className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
@@ -224,8 +266,8 @@ const CyberButton = ({ children, href, variant = 'primary', icon: Icon }: { chil
             transition={{ duration: 3, repeat: Infinity }}
           />
         )}
-      </motion.button>
-    </Link>
+      </Link>
+    </motion.div>
   );
 };
 
@@ -309,12 +351,16 @@ export default function LandingPage() {
     { icon: Globe, title: 'Nexus Network', description: 'Seamlessly sync across all devices in the metaverse. Your workspace follows you everywhere.' },
   ];
 
-  const particles = useMemo(() => Array.from({ length: 30 }, (_, i) => ({
-    id: i,
-    delay: i * 0.5,
-    size: 2 + Math.random() * 4,
-    duration: 15 + Math.random() * 10
-  })), []);
+  const [particles, setParticles] = useState<Array<{id: number; delay: number; size: number; duration: number}>>([]);
+
+  useEffect(() => {
+    setParticles(Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      delay: i * 0.5,
+      size: 2 + Math.random() * 4,
+      duration: 15 + Math.random() * 10
+    })));
+  }, []);
 
   if (loading) {
     return (
