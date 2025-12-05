@@ -8,7 +8,7 @@ import {
   Sparkles, Zap, Brain, MessageCircle, Shield, Rocket, 
   Play, ChevronDown, Globe, Code, Gamepad2, Users,
   Lock, Layers, Eye, Terminal, ArrowRight, Heart, 
-  GraduationCap, Star, Mail, MessageSquare
+  GraduationCap, Star, Mail, MessageSquare, Loader2
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -224,23 +224,34 @@ const NeuralNetwork = () => {
   );
 };
 
-const CyberButton = ({ children, href, variant = 'primary', icon: Icon }: { children: React.ReactNode; href: string; variant?: 'primary' | 'secondary'; icon?: any }) => {
+const CyberButton = ({ children, href, variant = 'primary', icon: Icon, isExternal = false }: { children: React.ReactNode; href: string; variant?: 'primary' | 'secondary'; icon?: any; isExternal?: boolean }) => {
   const [hover, setHover] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  
+  const handleClick = (e: React.MouseEvent) => {
+    if (href.startsWith('#')) return;
+    e.preventDefault();
+    setIsLoading(true);
+    router.push(href);
+  };
   
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: isLoading ? 1 : 1.02 }}
+      whileTap={{ scale: isLoading ? 1 : 0.98 }}
       onHoverStart={() => setHover(true)}
       onHoverEnd={() => setHover(false)}
     >
       <Link 
         href={href}
+        onClick={handleClick}
         className={cn(
           "relative px-8 py-4 rounded-xl font-bold text-lg overflow-hidden group transition-all duration-300 inline-flex items-center",
           variant === 'primary' 
             ? "bg-primary text-primary-foreground hover:shadow-[0_0_40px_hsl(var(--primary)/0.5)]" 
-            : "bg-transparent border-2 border-primary/50 text-primary hover:border-primary hover:bg-primary/10"
+            : "bg-transparent border-2 border-primary/50 text-primary hover:border-primary hover:bg-primary/10",
+          isLoading && "pointer-events-none opacity-80"
         )}
       >
         <motion.div
@@ -250,8 +261,17 @@ const CyberButton = ({ children, href, variant = 'primary', icon: Icon }: { chil
           transition={{ duration: 0.6 }}
         />
         <span className="relative z-10 flex items-center gap-3">
-          {children}
-          {Icon && <Icon className="w-5 h-5" />}
+          {isLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>Loading...</span>
+            </>
+          ) : (
+            <>
+              {children}
+              {Icon && <Icon className="w-5 h-5" />}
+            </>
+          )}
         </span>
         
         {variant === 'primary' && (
@@ -395,6 +415,13 @@ export default function LandingPage() {
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.9]);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [signupLoading, setSignupLoading] = useState(false);
+  
+  const handleNavigation = (path: string, setLoading: (val: boolean) => void) => {
+    setLoading(true);
+    router.push(path);
+  };
 
   useEffect(() => {
     if (!loading && user) {
@@ -515,24 +542,44 @@ export default function LandingPage() {
           </nav>
 
           <div className="flex items-center gap-2 md:gap-4">
-            <Link href="/login">
-              <motion.button
-                className="px-3 md:px-5 py-2 text-sm md:text-base text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Login
-              </motion.button>
-            </Link>
-            <Link href="/signup">
-              <motion.button
-                className="px-3 md:px-5 py-2 text-sm md:text-base bg-primary text-primary-foreground rounded-lg hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Join Free
-              </motion.button>
-            </Link>
+            <motion.button
+              onClick={() => handleNavigation('/login', setLoginLoading)}
+              disabled={loginLoading || signupLoading}
+              className={cn(
+                "px-3 md:px-5 py-2 text-sm md:text-base text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-all flex items-center gap-2",
+                (loginLoading || signupLoading) && "opacity-70 cursor-not-allowed"
+              )}
+              whileHover={{ scale: loginLoading ? 1 : 1.05 }}
+              whileTap={{ scale: loginLoading ? 1 : 0.95 }}
+            >
+              {loginLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="hidden md:inline">Loading...</span>
+                </>
+              ) : (
+                'Login'
+              )}
+            </motion.button>
+            <motion.button
+              onClick={() => handleNavigation('/signup', setSignupLoading)}
+              disabled={loginLoading || signupLoading}
+              className={cn(
+                "px-3 md:px-5 py-2 text-sm md:text-base bg-primary text-primary-foreground rounded-lg hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] transition-all flex items-center gap-2",
+                (loginLoading || signupLoading) && "opacity-70 cursor-not-allowed"
+              )}
+              whileHover={{ scale: signupLoading ? 1 : 1.05 }}
+              whileTap={{ scale: signupLoading ? 1 : 0.95 }}
+            >
+              {signupLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="hidden md:inline">Loading...</span>
+                </>
+              ) : (
+                'Join Free'
+              )}
+            </motion.button>
           </div>
         </div>
       </motion.header>
