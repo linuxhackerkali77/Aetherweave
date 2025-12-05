@@ -35,7 +35,7 @@ export default function Header({ onNavToggle, isNavOpen }: HeaderProps) {
         <div className="flex items-center gap-2">
             <AetherLogo className="w-6 h-6 md:w-8 md:h-8 text-primary" />
              <h1 className="hidden lg:block text-lg xl:text-xl font-bold font-mono capitalize text-glow">
-                // AETHERWEAVE
+                {"//"} AETHERWEAVE
             </h1>
              <h1 className="hidden md:block lg:hidden text-sm font-bold font-mono capitalize text-glow">
                 AETHER

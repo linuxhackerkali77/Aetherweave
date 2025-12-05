@@ -36,4 +36,6 @@ function initializeFirebase(): { app: FirebaseApp, auth: Auth, firestore: Firest
   return { app: firebaseApp, auth: authInstance, firestore: firestoreInstance };
 }
 
-export { initializeFirebase };
+const { auth, firestore } = initializeFirebase();
+
+export { initializeFirebase, auth, firestore };

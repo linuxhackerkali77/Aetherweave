@@ -53,7 +53,7 @@ class TabAutoEnhancer {
 
     // Override XMLHttpRequest
     const originalXHR = window.XMLHttpRequest;
-    window.XMLHttpRequest = function() {
+    const CustomXHR = function(this: XMLHttpRequest) {
       const xhr = new originalXHR();
       const originalSend = xhr.send;
       
@@ -76,7 +76,8 @@ class TabAutoEnhancer {
       };
       
       return xhr;
-    };
+    } as unknown as typeof XMLHttpRequest;
+    window.XMLHttpRequest = CustomXHR;
   }
 
   private observeErrors() {

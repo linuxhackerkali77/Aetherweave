@@ -6,7 +6,7 @@ import { useToast } from './use-toast';
 import { UserProfile, useUser } from './use-user';
 import { PublicUser } from './use-connections';
 import { createCallSession } from '@/ai/flows/create-call-session-flow';
-import { collection, doc, onSnapshot, addDoc, serverTimestamp, setDoc, deleteDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, onSnapshot, addDoc, serverTimestamp, setDoc, deleteDoc, updateDoc, Timestamp } from 'firebase/firestore';
 import { useFirestore } from '@/firebase/provider';
 import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
@@ -173,7 +173,7 @@ useEffect(() => {
               await pc.setLocalDescription(answer);
               await addDoc(remoteSignalingCollectionRef!, {
                   type: 'answer',
-                  payload: answer.toJSON(),
+                  payload: answer,
                   senderId: currentUser?.id,
                   timestamp: serverTimestamp(),
               });
@@ -214,7 +214,7 @@ useEffect(() => {
       if (event.candidate && remoteSignalingCollectionRef && firestore && currentUser) {
         addDoc(remoteSignalingCollectionRef, {
             type: 'ice-candidate',
-            payload: event.candidate.toJSON(),
+            payload: event.candidate,
             senderId: currentUser.id,
             timestamp: serverTimestamp(),
         }).catch(e => console.error("Error sending ICE candidate:", e));
@@ -261,7 +261,7 @@ useEffect(() => {
         // Also post the offer to their signaling subcollection
          await addDoc(collection(firestore, remoteSignalingDoc.path, 'messages'), {
             type: 'offer',
-            payload: offer.toJSON(),
+            payload: offer,
             senderId: currentUser.id,
             timestamp: serverTimestamp(),
          });
@@ -281,7 +281,20 @@ useEffect(() => {
         id: incomingCall.fromUserId,
         displayName: incomingCall.fromUserName,
         username: incomingCall.fromUserName,
-        photoURL: '', email: '',
+        photoURL: '',
+        email: '',
+        createdAt: Timestamp.now(),
+        xp: 0,
+        level: 1,
+        badgesUnlocked: [],
+        status: 'offline',
+        lastSeen: Timestamp.now(),
+        bio: '',
+        inventory: [],
+        messagesSent: 0,
+        notesCreated: 0,
+        filesUploaded: 0,
+        friends: 0,
     };
     
     try {
@@ -304,7 +317,7 @@ useEffect(() => {
                           const localMessagesRef = collection(firestore, 'users', fromUser.id, 'signaling', currentUser.id, 'messages');
                           await addDoc(localMessagesRef, {
                               type: 'answer',
-                              payload: answer.toJSON(),
+                              payload: answer,
                               senderId: currentUser.id,
                               timestamp: serverTimestamp()
                           });

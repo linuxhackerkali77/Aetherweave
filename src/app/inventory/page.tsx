@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useInventory } from '@/hooks/use-inventory';
 import { Box, Sparkles, Wand2, ArrowUpCircle, Pipette, DollarSign, Users, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Skeleton } from '@/components/ui/skeleton';
 import { appEventEmitter } from '@/lib/event-emitter';
@@ -57,7 +58,7 @@ export default function InventoryPage() {
                     <h3 className="text-xl font-headline">Your Inventory is Empty</h3>
                     <p className="text-sm">Visit the AetherStore to purchase new items.</p>
                     <Button variant="outline" className="mt-4" asChild>
-                        <a href="/store">Go to Store</a>
+                        <Link href="/store">Go to Store</Link>
                     </Button>
                 </div>
             )}

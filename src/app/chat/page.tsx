@@ -173,24 +173,24 @@ function ChatPageContent() {
       setShowGroupSettings(true);
     }
     
-    appEventEmitter.on('ui:pin-user', handlePinUser);
-    appEventEmitter.on('ui:show-user-profile', handleShowUserProfile);
-    appEventEmitter.on('chat:reply-to', handleReplyTo);
-    appEventEmitter.on('chat:forward-message', handleForwardMessage);
-    appEventEmitter.on('group:show-info', handleGroupInfo);
-    appEventEmitter.on('group:edit', handleEditGroup);
-    appEventEmitter.on('group:leave', handleLeaveGroup);
-    appEventEmitter.on('group:delete', handleDeleteGroup);
+    appEventEmitter.on('ui:pin-user', handlePinUser as (...args: unknown[]) => void);
+    appEventEmitter.on('ui:show-user-profile', handleShowUserProfile as (...args: unknown[]) => void);
+    appEventEmitter.on('chat:reply-to', handleReplyTo as (...args: unknown[]) => void);
+    appEventEmitter.on('chat:forward-message', handleForwardMessage as (...args: unknown[]) => void);
+    appEventEmitter.on('group:show-info', handleGroupInfo as (...args: unknown[]) => void);
+    appEventEmitter.on('group:edit', handleEditGroup as (...args: unknown[]) => void);
+    appEventEmitter.on('group:leave', handleLeaveGroup as (...args: unknown[]) => void);
+    appEventEmitter.on('group:delete', handleDeleteGroup as (...args: unknown[]) => void);
 
     return () => {
-        appEventEmitter.off('ui:pin-user', handlePinUser);
-        appEventEmitter.off('ui:show-user-profile', handleShowUserProfile);
-        appEventEmitter.off('chat:reply-to', handleReplyTo);
-        appEventEmitter.off('chat:forward-message', handleForwardMessage);
-        appEventEmitter.off('group:show-info', handleGroupInfo);
-        appEventEmitter.off('group:edit', handleEditGroup);
-        appEventEmitter.off('group:leave', handleLeaveGroup);
-        appEventEmitter.off('group:delete', handleDeleteGroup);
+        appEventEmitter.off('ui:pin-user', handlePinUser as (...args: unknown[]) => void);
+        appEventEmitter.off('ui:show-user-profile', handleShowUserProfile as (...args: unknown[]) => void);
+        appEventEmitter.off('chat:reply-to', handleReplyTo as (...args: unknown[]) => void);
+        appEventEmitter.off('chat:forward-message', handleForwardMessage as (...args: unknown[]) => void);
+        appEventEmitter.off('group:show-info', handleGroupInfo as (...args: unknown[]) => void);
+        appEventEmitter.off('group:edit', handleEditGroup as (...args: unknown[]) => void);
+        appEventEmitter.off('group:leave', handleLeaveGroup as (...args: unknown[]) => void);
+        appEventEmitter.off('group:delete', handleDeleteGroup as (...args: unknown[]) => void);
     };
   }, [connectedUsers, router, handleLeaveGroup, handleDeleteGroup]);
 
