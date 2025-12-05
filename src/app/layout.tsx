@@ -49,7 +49,7 @@ const spaceGrotesk = Space_Grotesk({
   variable: '--font-headline',
 });
 
-const publicRoutes = ['/login', '/signup', '/forgot-password'];
+const publicRoutes = ['/', '/login', '/signup', '/forgot-password'];
 
 function AppLayout({ children }: { children: ReactNode }) {
   useSoundPlayer();
@@ -135,9 +135,9 @@ function AppInitializer({ children }: { children: ReactNode }) {
             const isPublic = publicRoutes.includes(pathname);
             const isRoot = pathname === '/';
             
-            if (user && (isPublic || isRoot)) {
+            if (user && isPublic && !isRoot) {
                 router.replace('/apps');
-            } else if (!user && !isPublic && !isRoot) {
+            } else if (!user && !isPublic) {
                 router.replace('/login');
             } else {
                 setAuthResolved(true);

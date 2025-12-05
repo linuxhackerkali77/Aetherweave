@@ -95,8 +95,8 @@ io.on('connection', (socket) => {
   });
 });
 
-httpServer.listen(PORT, () => {
-  console.log(`🚀 AetherDash Backend running on port ${PORT}`);
+httpServer.listen(PORT, 'localhost', () => {
+  console.log(`🚀 AetherDash Backend running on localhost:${PORT}`);
   console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 CORS Origin: ${process.env.CORS_ORIGIN || 'http://localhost:3000'}`);
 });

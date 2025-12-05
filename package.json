@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
-    "dev:frontend": "next dev",
+    "dev": "next dev -H 0.0.0.0 -p 5000",
+    "dev:all": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "next dev -H 0.0.0.0 -p 5000",
     "dev:backend": "cd backend && npm run dev",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
@@ -59,7 +60,7 @@
     "framer-motion": "^11.5.7",
     "genkit": "^1.20.0",
     "lucide-react": "^0.475.0",
-    "next": "15.0.0",
+    "next": "^15.0.0",
     "next-themes": "0.3.0",
     "openmeteo": "^1.1.4",
     "patch-package": "^8.0.0",
@@ -80,8 +81,10 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.5.7",
     "genkit-cli": "^1.20.0"
+  },
+  "optionalDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.7"
   }
 }
