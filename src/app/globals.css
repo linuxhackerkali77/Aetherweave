@@ -5,6 +5,28 @@
 
 @layer base {
   :root {
+    /* Default theme: cyber-default (fallback values for SSR) */
+    --theme-background: 220 40% 5%;
+    --theme-foreground: 180 100% 95%;
+    --theme-card: 220 30% 10%;
+    --theme-card-foreground: 180 100% 95%;
+    --theme-popover: 220 40% 2%;
+    --theme-popover-foreground: 180 100% 95%;
+    --theme-primary: 180 100% 50%;
+    --theme-primary-foreground: 180 100% 5%;
+    --theme-secondary: 280 100% 60%;
+    --theme-secondary-foreground: 280 100% 98%;
+    --theme-muted: 200 20% 15%;
+    --theme-muted-foreground: 200 20% 65%;
+    --theme-accent: 180 50% 30%;
+    --theme-accent-foreground: 180 100% 95%;
+    --theme-destructive: 0 84.2% 60.2%;
+    --theme-destructive-foreground: 0 0% 98%;
+    --theme-border: 180 100% 25%;
+    --theme-input: 220 30% 12%;
+    --theme-ring: 180 100% 60%;
+
+    /* Map theme vars to actual vars */
     --background: var(--theme-background);
     --foreground: var(--theme-foreground);
     --card: var(--theme-card);

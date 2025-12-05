@@ -43,7 +43,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (selectedTheme) {
       document.body.className = `theme-${selectedTheme.id}`;
       for (const [key, value] of Object.entries(selectedTheme.colors)) {
-        root.style.setProperty(`--${key}`, value);
+        root.style.setProperty(`--theme-${key}`, value);
       }
     }
   }, [activeTheme]);

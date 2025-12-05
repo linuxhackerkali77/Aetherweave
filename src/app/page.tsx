@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/hooks/use-user';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Sparkles, Zap, Brain, MessageCircle, Shield, Rocket, 
-  Play, ChevronDown, Globe,
-  Lock, Layers, Eye, Terminal, ArrowRight
+  Play, ChevronDown, Globe, Code, Gamepad2, Users,
+  Lock, Layers, Eye, Terminal, ArrowRight, Heart, 
+  GraduationCap, Star, Mail, MessageSquare
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -311,13 +312,80 @@ const StatCounter = ({ value, label, suffix = '' }: { value: number; label: stri
       viewport={{ once: true }}
       className="text-center"
     >
-      <div className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-[length:200%] animate-gradient">
+      <div className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent bg-[length:200%] animate-gradient">
         {count.toLocaleString()}{suffix}
       </div>
-      <div className="text-muted-foreground mt-2">{label}</div>
+      <div className="text-muted-foreground mt-2 text-sm md:text-base">{label}</div>
     </motion.div>
   );
 };
+
+const CreatorCard = () => (
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    className="relative"
+  >
+    <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/20 rounded-3xl blur-xl" />
+    <div className="relative p-8 md:p-12 rounded-3xl border border-primary/30 bg-gradient-to-br from-background/90 via-card/70 to-background/90 backdrop-blur-xl">
+      <div className="flex flex-col md:flex-row items-center gap-8">
+        <div className="relative">
+          <div className="w-32 h-32 md:w-40 md:h-40 rounded-2xl bg-gradient-to-br from-primary via-secondary to-primary p-1">
+            <div className="w-full h-full rounded-2xl bg-card flex items-center justify-center">
+              <div className="text-center">
+                <GraduationCap className="w-12 h-12 md:w-16 md:h-16 text-primary mx-auto mb-2" />
+                <span className="text-xs font-mono text-muted-foreground">Class 10</span>
+              </div>
+            </div>
+          </div>
+          <motion.div
+            className="absolute -inset-2 rounded-3xl border border-primary/30"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+        
+        <div className="flex-1 text-center md:text-left">
+          <motion.div
+            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/30 mb-4"
+            animate={{ scale: [1, 1.02, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <Star className="w-4 h-4 text-primary" />
+            <span className="text-xs font-mono text-primary">FOUNDER & DEVELOPER</span>
+          </motion.div>
+          
+          <h3 className="text-3xl md:text-4xl font-bold font-headline mb-2">
+            <GlitchText>Mubashir Ali</GlitchText>
+          </h3>
+          
+          <p className="text-lg text-muted-foreground mb-4">
+            15 Years Old • Student Developer • Pakistan
+          </p>
+          
+          <p className="text-muted-foreground leading-relaxed max-w-xl">
+            A passionate young developer from Pakistan, currently in Class 10. Started coding at a young age 
+            and fell in love with creating digital experiences. AetherDash is my vision of bringing 
+            a futuristic, cyberpunk-themed productivity platform to life - proving that age is just a number 
+            when it comes to innovation.
+          </p>
+          
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-6">
+            {['React', 'Next.js', 'Firebase', 'TypeScript', 'Tailwind'].map((tech) => (
+              <span 
+                key={tech}
+                className="px-3 py-1 text-xs font-mono rounded-lg bg-primary/10 border border-primary/30 text-primary"
+              >
+                {tech}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
 
 export default function LandingPage() {
   const router = useRouter();
@@ -343,12 +411,12 @@ export default function LandingPage() {
   }, []);
 
   const features = [
-    { icon: Brain, title: 'Neural AI Core', description: 'Powered by advanced AI that learns your workflow and anticipates your needs. Experience seamless productivity enhancement.' },
-    { icon: MessageCircle, title: 'Quantum Comms', description: 'Real-time encrypted messaging with holographic video calls. Connect instantly across the digital realm.' },
-    { icon: Shield, title: 'CyberShield Pro', description: 'Military-grade encryption protects your data. Your privacy is our prime directive.' },
-    { icon: Layers, title: 'Omni-Dashboard', description: 'Unified command center for all your tasks, notes, and files. Total control at your fingertips.' },
-    { icon: Zap, title: 'HyperFlow Engine', description: 'Lightning-fast performance with zero-latency interactions. The speed of thought, digitized.' },
-    { icon: Globe, title: 'Nexus Network', description: 'Seamlessly sync across all devices in the metaverse. Your workspace follows you everywhere.' },
+    { icon: Brain, title: 'AI-Powered Hub', description: 'Integrated AI assistant that helps you with tasks, answers questions, and enhances your productivity workflow.' },
+    { icon: MessageCircle, title: 'Real-Time Chat', description: 'Connect with friends through instant messaging. Share ideas, collaborate, and stay connected in the digital realm.' },
+    { icon: Gamepad2, title: 'Gaming Dashboard', description: 'Discord-like gaming spaces with channels, voice support, and community features for gamers.' },
+    { icon: Layers, title: 'Unified Dashboard', description: 'All your tasks, notes, news, and tools in one cyberpunk command center. Total control at your fingertips.' },
+    { icon: Code, title: 'Developer Mode', description: 'Built-in code editor with syntax highlighting, perfect for developers who want to code on the go.' },
+    { icon: Users, title: 'Community Driven', description: 'Join a growing community of users. Make friends, join spaces, and be part of something amazing.' },
   ];
 
   const [particles, setParticles] = useState<Array<{id: number; delay: number; size: number; duration: number}>>([]);
@@ -405,7 +473,7 @@ export default function LandingPage() {
       ))}
 
       <motion.header 
-        className="fixed top-0 left-0 right-0 z-50 px-6 py-4"
+        className="fixed top-0 left-0 right-0 z-50 px-4 md:px-6 py-4 backdrop-blur-md bg-background/50 border-b border-border/30"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8 }}
@@ -425,13 +493,13 @@ export default function LandingPage() {
                 transition={{ duration: 2, repeat: Infinity }}
               />
             </div>
-            <span className="text-2xl font-bold font-headline tracking-tight">
+            <span className="text-xl md:text-2xl font-bold font-headline tracking-tight">
               <GlitchText>AETHERDASH</GlitchText>
             </span>
           </motion.div>
 
           <nav className="hidden md:flex items-center gap-8">
-            {['Features', 'Security', 'Pricing'].map((item, i) => (
+            {['Features', 'About', 'Contact'].map((item, i) => (
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
@@ -446,10 +514,10 @@ export default function LandingPage() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4">
             <Link href="/login">
               <motion.button
-                className="px-5 py-2 text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-all"
+                className="px-3 md:px-5 py-2 text-sm md:text-base text-primary border border-primary/30 rounded-lg hover:bg-primary/10 transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
@@ -458,11 +526,11 @@ export default function LandingPage() {
             </Link>
             <Link href="/signup">
               <motion.button
-                className="px-5 py-2 bg-primary text-primary-foreground rounded-lg hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] transition-all"
+                className="px-3 md:px-5 py-2 text-sm md:text-base bg-primary text-primary-foreground rounded-lg hover:shadow-[0_0_20px_hsl(var(--primary)/0.4)] transition-all"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Get Started
+                Join Free
               </motion.button>
             </Link>
           </div>
@@ -470,19 +538,19 @@ export default function LandingPage() {
       </motion.header>
 
       <motion.section 
-        className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden"
+        className="relative min-h-screen flex items-center justify-center pt-24 md:pt-20 overflow-hidden"
         style={{ opacity: heroOpacity, scale: heroScale }}
       >
         <NeuralNetwork />
         
-        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
             <motion.div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-8"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/5 mb-6 md:mb-8"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.3 }}
@@ -492,26 +560,27 @@ export default function LandingPage() {
                 animate={{ scale: [1, 1.3, 1] }}
                 transition={{ duration: 1, repeat: Infinity }}
               />
-              <span className="text-sm font-mono text-muted-foreground">SYSTEM_STATUS: ONLINE</span>
+              <span className="text-xs md:text-sm font-mono text-muted-foreground">BETA VERSION • BUILT BY A 15-YEAR-OLD</span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-headline leading-tight mb-8">
-              <span className="block text-foreground">Welcome to the</span>
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold font-headline leading-tight mb-6 md:mb-8">
+              <span className="block text-foreground">Your Cyberpunk</span>
               <span className="block mt-2">
                 <GlitchText className="bg-gradient-to-r from-primary via-cyan-400 to-secondary bg-clip-text text-transparent bg-[length:200%] animate-gradient">
-                  Digital Nexus
+                  Digital Hub
                 </GlitchText>
               </span>
             </h1>
 
             <motion.p
-              className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed"
+              className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-8 md:mb-12 leading-relaxed px-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
             >
-              Experience the future of productivity. AetherDash is your cyberpunk command center — 
-              where AI meets human potential in perfect synthesis.
+              AetherDash is a futuristic productivity platform with AI assistance, real-time chat, 
+              gaming spaces, and more — all wrapped in a stunning cyberpunk aesthetic. 
+              Created with passion by a young developer from Pakistan.
             </motion.p>
 
             <motion.div
@@ -521,10 +590,10 @@ export default function LandingPage() {
               transition={{ delay: 0.7 }}
             >
               <CyberButton href="/signup" variant="primary" icon={Rocket}>
-                Enter the Nexus
+                Get Started Free
               </CyberButton>
               <CyberButton href="#features" variant="secondary" icon={Play}>
-                Watch Demo
+                Explore Features
               </CyberButton>
             </motion.div>
           </motion.div>
@@ -541,34 +610,34 @@ export default function LandingPage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </motion.section>
 
-      <section className="py-20 relative">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-16">
-            <StatCounter value={50000} label="Active Users" suffix="+" />
+      <section className="py-16 md:py-20 relative">
+        <div className="max-w-6xl mx-auto px-4 md:px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-16">
+            <StatCounter value={100} label="Beta Users" suffix="+" />
             <StatCounter value={99} label="Uptime" suffix="%" />
-            <StatCounter value={2} label="Response Time" suffix="ms" />
-            <StatCounter value={256} label="Encryption" suffix="-bit" />
+            <StatCounter value={6} label="Core Features" suffix="+" />
+            <StatCounter value={1} label="Passionate Dev" suffix="" />
           </div>
         </div>
       </section>
 
-      <section id="features" className="py-32 relative">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="features" className="py-20 md:py-32 relative">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <motion.div
-            className="text-center mb-20"
+            className="text-center mb-12 md:mb-20"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-5xl font-bold font-headline mb-6">
-              <GlitchText>Augmented Capabilities</GlitchText>
+            <h2 className="text-3xl md:text-5xl font-bold font-headline mb-4 md:mb-6">
+              <GlitchText>Platform Features</GlitchText>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Unlock your full potential with our next-generation toolkit designed for the digital age.
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              Everything you need in one cyberpunk-themed platform. Built with modern tech and lots of love.
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {features.map((feature, i) => (
               <HologramCard 
                 key={feature.title} 
@@ -580,147 +649,115 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section id="security" className="py-32 relative overflow-hidden">
+      <section id="about" className="py-20 md:py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-primary/5" />
         
-        <div className="max-w-6xl mx-auto px-6 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold font-headline mb-6">
-                <GlitchText>Fortress-Grade Security</GlitchText>
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8">
-                Your data is protected by military-grade encryption and zero-knowledge architecture. 
-                We cant see your data, and neither can anyone else.
-              </p>
-              
-              <div className="space-y-4">
-                {[
-                  { icon: Lock, text: 'End-to-end encryption on all communications' },
-                  { icon: Eye, text: 'Zero-knowledge proof architecture' },
-                  { icon: Terminal, text: 'Open-source security audits' },
-                  { icon: Shield, text: 'GDPR & SOC2 compliant' },
-                ].map((item, i) => (
-                  <motion.div
-                    key={i}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-card/50 border border-border/50"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <item.icon className="w-5 h-5 text-primary" />
-                    </div>
-                    <span className="text-foreground">{item.text}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="relative"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <div className="relative aspect-square max-w-md mx-auto">
-                <motion.div
-                  className="absolute inset-0 rounded-full border border-primary/30"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.div
-                  className="absolute inset-8 rounded-full border border-secondary/30"
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                />
-                <motion.div
-                  className="absolute inset-16 rounded-full border border-primary/30"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                />
-                
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="w-32 h-32 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center"
-                    animate={{ boxShadow: ['0 0 0 0 hsl(var(--primary) / 0)', '0 0 0 30px hsl(var(--primary) / 0)'] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <Shield className="w-16 h-16 text-white" />
-                  </motion.div>
-                </div>
-
-                {[0, 60, 120, 180, 240, 300].map((angle, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-4 h-4 rounded-full bg-primary"
-                    style={{
-                      top: `${50 + 45 * Math.sin((angle * Math.PI) / 180)}%`,
-                      left: `${50 + 45 * Math.cos((angle * Math.PI) / 180)}%`,
-                      transform: 'translate(-50%, -50%)',
-                    }}
-                    animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-                  />
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-32 relative">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+        <div className="max-w-5xl mx-auto px-4 md:px-6 relative z-10">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            className="text-center mb-12 md:mb-16"
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-4xl md:text-6xl font-bold font-headline mb-8">
-              Ready to <GlitchText>Transcend</GlitchText>?
+            <h2 className="text-3xl md:text-5xl font-bold font-headline mb-4 md:mb-6">
+              Meet the <GlitchText>Creator</GlitchText>
             </h2>
-            <p className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Join thousands of pioneers already experiencing the future of digital productivity. 
-              Your journey into the nexus begins now.
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+              The story behind AetherDash - a passion project by a young developer.
             </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <CyberButton href="/signup" variant="primary" icon={ArrowRight}>
-                Create Free Account
-              </CyberButton>
-            </div>
+          </motion.div>
 
-            <p className="mt-8 text-sm text-muted-foreground">
-              No credit card required • Free forever tier • Setup in 30 seconds
+          <CreatorCard />
+
+          <motion.div
+            className="mt-12 md:mt-16 p-6 md:p-8 rounded-2xl border border-primary/30 bg-card/50 backdrop-blur-sm"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-xl md:text-2xl font-bold mb-4 flex items-center gap-3">
+              <Heart className="w-6 h-6 text-red-500" />
+              Why I Built This
+            </h3>
+            <p className="text-muted-foreground leading-relaxed">
+              I wanted to create something that combines my love for cyberpunk aesthetics with useful productivity tools. 
+              AetherDash started as a learning project but evolved into a full-featured platform. Every feature you see 
+              here was built with dedication and countless hours of learning. This is proof that young developers can 
+              create amazing things when they put their minds to it. I hope you enjoy using AetherDash as much as 
+              I enjoyed building it!
             </p>
           </motion.div>
         </div>
       </section>
 
-      <footer className="py-12 border-t border-border/50">
-        <div className="max-w-7xl mx-auto px-6">
+      <section id="contact" className="py-20 md:py-32 relative">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-5xl font-bold font-headline mb-6 md:mb-8">
+              Ready to <GlitchText>Join</GlitchText>?
+            </h2>
+            <p className="text-lg md:text-xl text-muted-foreground mb-8 md:mb-12 max-w-2xl mx-auto">
+              Be part of the AetherDash community. Sign up for free and start exploring 
+              all the features. Your feedback helps make this platform better!
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+              <CyberButton href="/signup" variant="primary" icon={ArrowRight}>
+                Create Free Account
+              </CyberButton>
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-8">
+              Free forever • No credit card required • Join in seconds
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 pt-8 border-t border-border/50">
+              <a 
+                href="https://wa.me/9203122574283"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-green-400 transition-colors"
+              >
+                <MessageSquare className="w-5 h-5" />
+                <span>WhatsApp: 03122574283</span>
+              </a>
+              <a 
+                href="mailto:aetherweavedash@gmail.com"
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+              >
+                <Mail className="w-5 h-5" />
+                <span>aetherweavedash@gmail.com</span>
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      <footer className="py-8 md:py-12 border-t border-border/50">
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-white" />
               </div>
               <span className="font-bold">AETHERDASH</span>
+              <span className="text-xs px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">BETA</span>
             </div>
             
-            <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-primary transition-colors">Privacy</a>
-              <a href="#" className="hover:text-primary transition-colors">Terms</a>
-              <a href="#" className="hover:text-primary transition-colors">Support</a>
-              <a href="#" className="hover:text-primary transition-colors">API</a>
+            <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm text-muted-foreground">
+              <Link href="/login" className="hover:text-primary transition-colors">Login</Link>
+              <Link href="/signup" className="hover:text-primary transition-colors">Sign Up</Link>
+              <a href="#features" className="hover:text-primary transition-colors">Features</a>
+              <a href="#about" className="hover:text-primary transition-colors">About</a>
+              <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
             </div>
 
-            <p className="text-sm text-muted-foreground">
-              © 2025 AetherDash. All rights reserved.
+            <p className="text-sm text-muted-foreground text-center md:text-right">
+              Made with <Heart className="w-4 h-4 inline text-red-500" /> by Mubashir Ali
             </p>
           </div>
         </div>
