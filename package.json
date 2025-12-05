@@ -9,6 +9,7 @@
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "rm -rf .next .netlify && next build",
+    "clean": "if exist .next rmdir /s /q .next && if exist .netlify rmdir /s /q .netlify && echo Cache cleaned",
     "build:backend": "cd backend && npm run build",
     "start": "next start",
     "start:backend": "cd backend && npm run start",
@@ -76,11 +77,11 @@
     "tailwindcss-animate": "^1.0.7",
     "typescript": "^5",
     "wav": "^1.0.2",
-    "zod": "^3.24.2",
-    "eslint": "^8.57.1",
-    "eslint-config-next": "^15.5.7"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.7",
     "genkit-cli": "^1.20.0"
   }
 }
