@@ -7,7 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { 
   Sparkles, Zap, Brain, MessageCircle, Shield, Rocket, 
   Play, ChevronDown, Globe,
-  Lock, Layers, Eye, Terminal
+  Lock, Layers, Eye, Terminal, ArrowRight
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
