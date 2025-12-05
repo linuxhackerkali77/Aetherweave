@@ -5,8 +5,3 @@
 [build.environment]
   NODE_VERSION = "20"
   NETLIFY_NEXT_PLUGIN_SKIP = "true"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-  [plugins.inputs]
-    disabled = true
