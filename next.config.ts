@@ -3,6 +3,8 @@ import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  output: 'export',
+  trailingSlash: true,
   compress: true,
   poweredByHeader: false,
   generateEtags: true,

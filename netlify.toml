@@ -1,14 +1,6 @@
 [build]
   command = "npm run build"
-  publish = ".next"
+  publish = "out"
 
 [build.environment]
-  # Clear cache on each build to avoid secret scanning issues
   NODE_VERSION = "20"
-
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-# Ignore build cache to prevent secret scanning false positives
-[build.processing]
-  skip_processing = false
