@@ -1,0 +1,22 @@
+modules = ["nodejs-20", "web", "nix"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+
+[userenv]
+
+[userenv.shared]
+NEXT_PUBLIC_FIREBASE_API_KEY = "AIzaSyDQXx_TQylXDvIKHf-ud_7T8RbRdTC91ng"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN = "studio-4634736248-c0b42.firebaseapp.com"
+NEXT_PUBLIC_FIREBASE_PROJECT_ID = "studio-4634736248-c0b42"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET = "studio-4634736248-c0b42.appspot.com"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID = "185134863770"
+NEXT_PUBLIC_FIREBASE_APP_ID = "1:185134863770:web:4af101ef873aed44105623"
+NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID = "G-S33W1P5G5D"
+NEXT_PUBLIC_API_URL = "https://d9ec0bbc-89d8-47c4-b304-527133da84cb-00-lemqmaust2df.pike.replit.dev:4000/api"
+PORT = "4000"
+NODE_ENV = "development"
+CORS_ORIGIN = "https://d9ec0bbc-89d8-47c4-b304-527133da84cb-00-lemqmaust2df.pike.replit.dev"
+FIREBASE_PROJECT_ID = "studio-4634736248-c0b42"
