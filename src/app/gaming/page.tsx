@@ -91,7 +91,7 @@ export default function GamingDashboardPage() {
     return (
         <div className="flex flex-1 p-4 gap-4">
             <GamingChatArea />
-            <GamingMemberList activeSpaceId={null} />
+            <GamingMemberList />
 
             <Dialog open={showUsernameModal} onOpenChange={setShowUsernameModal}>
                 <DialogContent className="sm:max-w-[425px] glass-card" onInteractOutside={(e) => e.preventDefault()}>
