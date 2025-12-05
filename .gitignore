@@ -43,4 +43,5 @@ next-env.d.ts
 
 # firebase
 firebase-debug.log
-firestore-debug.log"studio-4634736248-c0b42-firebase-adminsdk-fbsvc-e41e9d6a44.json" 
+firestore-debug.log
+*-firebase-adminsdk-*.json
